@@ -1,0 +1,39 @@
+{
+	"description": "The CodeIgniter framework",
+	"name": "codeigniter/framework",
+	"type": "project",
+	"homepage": "https://codeigniter.com",
+	"license": "MIT",
+	"support": {
+		"forum": "http://forum.codeigniter.com/",
+		"wiki": "https://github.com/bcit-ci/CodeIgniter/wiki",
+		"slack": "https://codeigniterchat.slack.com",
+		"source": "https://github.com/bcit-ci/CodeIgniter"
+	},
+	"require": {
+		"php": "^7.3 || ^8.0",
+		"dompdf/dompdf": "^0.8.5",
+		"phpoffice/phpspreadsheet": "^1.25",
+		"psr/http-client": "^1.0",
+        "psr/http-factory": "^1.0",
+        "psr/simple-cache": "^1.0 || ^2.0 || ^3.0"
+	},
+	"suggest": {
+		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
+	},
+	"require-dev": {
+		"mikey179/vfsstream": "1.1.*",
+		"phpunit/phpunit": "4.* || 5.*"
+	},
+	 "autoload": {
+        "psr-4": {
+            "PhpOffice\\PhpSpreadsheet\\": "src/PhpSpreadsheet"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PhpOffice\\PhpSpreadsheetTests\\": "tests/PhpSpreadsheetTests",
+            "PhpOffice\\PhpSpreadsheetInfra\\": "infra"
+        }
+    }
+}
