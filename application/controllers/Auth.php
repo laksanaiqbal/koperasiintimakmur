@@ -43,25 +43,26 @@ class Auth extends CI_Controller
 				$sess_data = array(
 					'IS_LOGIN' => true,
 					'login' => 'login_admin',
-					'USER_NAME'=>$row->USER_NAME,
-					'APP_OWNER'=>$row->APP_OWNER,
-					'APP_ID'=>$row->APP_ID,
+					'ID' => $row->ID,
+					'USER_NAME' => $row->USER_NAME,
+					'APP_OWNER' => $row->APP_OWNER,
+					'APP_ID' => $row->APP_ID,
 					'FID' => $row->FID,
 					'NIK' => $row->NIK,
 					'NIKKary' => $row->NIKKaryawan,
-					'NAMA' => $row->Nama,					
+					'NAMA' => $row->Nama,
 					'DEPT_NAME' => $row->DEPT_NAME,
-					'JABATAN' => $row->JABATAN,					
+					'JABATAN' => $row->JABATAN,
 					'browser' => $this->agent->browser() . ' ' . $this->agent->version(),
 					'robot' => $this->agent->robot(),
 					'mobile' => $this->agent->mobile(),
 					'platform' => $this->agent->platform(),
 					'agent_string' => $this->agent->agent_string()
-				);	
+				);
 				$this->session->set_userdata($sess_data);
-					$message['is_error']  = false;
-					$message['succes_msg'] = "success";
-					$message['redirect']   = site_url('Welcome');			
+				$message['is_error']  = false;
+				$message['succes_msg'] = "success";
+				$message['redirect']   = site_url('Welcome');
 			} else {
 				$message['is_error']  = true;
 				$message['error_msg'] = "Maaf , Password atau username salah Atau mungkin, silahkan di coba kembali";

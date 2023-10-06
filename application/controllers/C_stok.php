@@ -24,7 +24,7 @@ class C_stok extends CI_Controller
     public function index()
     {
         $data = array(
-            'title_form' => 'Report || Items Stock',
+            'title_form' => 'Items Stock',
             'url_back'   => site_url('C_stok')
         );
         $this->load->view('template/header');

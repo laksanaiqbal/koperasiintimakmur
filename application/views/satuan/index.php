@@ -19,6 +19,12 @@
             <div class="card-body">
                 <form class="theme-form">
                     <div class="mb-3 row">
+                        <div class="col-sm-5">
+                            <button id="btn_input" class="btn btn-pill btn-outline-info btn-air-info" type="button" title="btn btn-pill btn-outline-info btn-air-info"><i class="fa fa-plus-square">
+                                    Input Satuan </i></button>
+                        </div>
+                    </div>
+                    <!-- <div class="mb-3 row">
                         <label class="col-sm-3 col-form-label" for="txt_nmkary">Item Name</label>
                         <div class="col-sm-9">
                             <?php
@@ -46,9 +52,9 @@
                             <button id="btn_cari" class="btn btn-pill btn-outline-info btn-air-info" type="button" title="btn btn-pill btn-outline-info btn-air-info"><i class="fa fa-send-o"> Find
                                     Record</i></button>
                         </div>
-                    </div>
+                    </div> -->
                 </form>
-                <hr>
+                <!-- <hr> -->
                 <div class="table-responsive">
                     <!-- <table class="display" id="export-button"> -->
                     <table class="display" id="datatable_list">
@@ -78,7 +84,8 @@
         </div>
     </div>
 </div>
-
+<?php $this->load->view('satuan/add') ?>
+<?php $this->load->view('satuan/edit') ?>
 <script type="text/javascript">
     var table;
     $(document).ready(function(e) {
@@ -124,7 +131,6 @@
 
         });
         var buttons = new $.fn.dataTable.Buttons(table, {}).container().appendTo($('#button'));
-
     })
 
     $('#btn_reset').click(function() { //button reset event click
@@ -144,7 +150,72 @@
         window.scrollBy(0, 500);
     };
     $('#btn_input').click(function() { //button filter event click
-        $('#frm_input').modal('show'); // show bootstrap modal when complete loaded
-        $('.modal-title').text('  Add User Kuya'); // Set Title to Bootstrap modal title
+        $('#frmInput').modal('show'); // show bootstrap modal when complete loaded
+        $('.modal-title').text('  Tambah Satuan'); // Set Title to Bootstrap modal title
+        $('[name="txt_input_level"]').val(null).trigger('change');
+        $('[name="txt_input_employee"]').val(null).trigger('change');
     });
+
+    function edit_data(kodesat) {
+        $('.form-group').removeClass('has-error'); // clear error class
+        $('.help-block').empty(); // clear error string
+        // alert(kodesat);
+        //Ajax Load data from ajax
+        $.ajax({
+            url: "<?php echo site_url('C_satuan/ajax_edit') ?>/" + kodesat,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data) {
+                $('[name="kodesat"]').val(data.kodesat);
+                $('[name="namasat"]').val(data.namasat);
+                $('[name="jumlah"]').val(data.jumpcs);
+
+                $('#frmEdit').modal('show'); // show bootstrap modal when complete loaded
+                $('.modal-title').text('Edit Data Satuan'); // Set Title to Bootstrap modal title
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
+    }
+
+    function delete_data(id) {
+        var data_id = id;
+        var urls = '<?= site_url("C_satuan/delete_permanen/"); ?>';
+        swal({
+                title: "Are you sure?",
+                text: "Do you realy want to delete permanen this imaginary file?! Once deleted, you will not be able to recover this imaginary file!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: 'POST',
+                        url: urls + data_id,
+                        dataType: "JSON",
+                        success: function(data) {
+                            if (data.is_error == true) {
+                                swal('Oopps', data.error_message, 'error');
+                            } else {
+                                swal({
+                                    title: "Info",
+                                    text: "Good luck Bro, data telah berhasil di delete permanen .",
+                                    type: "success",
+                                    showConfirmButton: false,
+                                    timer: 1111
+                                });
+                            }
+                            table.ajax.reload();
+                        },
+                        error: function(data) {
+                            swal("NOT Disabled!", "Something blew up.", "error");
+                        }
+                    });
+                } else {
+                    swal("Your imaginary file is still disable!");
+                }
+            })
+    }
 </script>

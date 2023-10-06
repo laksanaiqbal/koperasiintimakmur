@@ -14,7 +14,11 @@ class M_kelompokbarang extends CI_Model
         parent::__construct();
         $this->load->database();
     }
-
+    public function getdata()
+    {
+        $query = $this->db->query("SELECT * FROM kelompok ORDER BY namaklmpk ASC");
+        return $query->result();
+    }
     private function _get_datatables_query()
     {
         $month = date('m') - 3;
@@ -23,7 +27,6 @@ class M_kelompokbarang extends CI_Model
         $this->db->from('kelompok a');
         // $this->db->where('year(a.tanggal)', $years);
         $i = 0;
-
         foreach ($this->column_search as $item) // loop column 
         {
             if ($_POST['search']['value']) // if datatable send POST for search
@@ -49,6 +52,8 @@ class M_kelompokbarang extends CI_Model
             $this->db->order_by(key($order), $order[key($order)]);
         }
     }
+
+
 
     function get_datatables($params)
     {
@@ -92,5 +97,32 @@ class M_kelompokbarang extends CI_Model
             $this->db->where('a.kodeklmpk', $params['txt_nmkary']);
         }
         return $this->db->count_all_results();
+    }
+    public function save($data)
+    {
+        $this->db->insert($this->table, $data);
+    }
+    public function save_log($data)
+    {
+        $this->db->insert('inv.kelompok', $data);
+        return $this->db->insert_id();
+    }
+    public function update($where, $save_data)
+    {
+        $this->db->update($this->table, $save_data, $where);
+        return $this->db->affected_rows();
+    }
+    public function delete_by_id($id)
+    {
+        $this->db->where('kodeklmpk', $id);
+        $this->db->delete($this->table);
+    }
+    public function get_by_id($kodeklmpk)
+    {
+        $this->db->from($this->table);
+        $this->db->where('kodeklmpk', $kodeklmpk);
+        $query = $this->db->get();
+
+        return $query->row();
     }
 }

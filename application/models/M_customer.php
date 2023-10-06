@@ -5,8 +5,8 @@ class M_customer extends CI_Model
 {
 
     var $table = 'customer';
-    var $column_order = array(null, 'a.kodecus', 'a.namacus', 'a.alamat', 'a.kota', 'a.hp'); //set column field database for datatable orderable
-    var $column_search = array('a.kodecus', 'a.namacus', 'a.alamat', 'a.kota', 'a.hp'); //set column field database for datatable searchable 
+    var $column_order = array(null, 'a.kodecus', 'a.namacus', 'a.alamat', 'a.kota', 'a.hp', 'a.batas'); //set column field database for datatable orderable
+    var $column_search = array('a.kodecus', 'a.namacus', 'a.alamat', 'a.kota', 'a.hp', 'a.batas'); //set column field database for datatable searchable 
     var $order = array('a.kodecus' => 'asc'); // default order 
 
     public function __construct()
@@ -15,11 +15,16 @@ class M_customer extends CI_Model
         $this->load->database();
     }
 
+    public function getdata()
+    {
+        $query = $this->db->query("SELECT * FROM customer ORDER BY namacus ASC");
+        return $query->result();
+    }
     private function _get_datatables_query()
     {
         $month = date('m') - 3;
         $years = date('Y');
-        $this->db->select("a.kodecus, a.namacus, a.alamat, a.kota, a.hp");
+        $this->db->select("a.kodecus, a.namacus, a.alamat, a.kota, a.hp,a.batas");
         $this->db->from('customer a');
         // $this->db->where('year(a.tanggal)', $years);
         $i = 0;
@@ -78,7 +83,7 @@ class M_customer extends CI_Model
         }
 
         $query = $this->db->get();
-        // die(var_dump($query->num_rows()));
+        // die(var_dump($query->num_rows())); 
         return $query->num_rows();
     }
     public function count_all($params)
@@ -92,5 +97,37 @@ class M_customer extends CI_Model
             $this->db->where('a.kodecus', $params['txt_nmkary']);
         }
         return $this->db->count_all_results();
+    }
+    public function save($data)
+    {
+        $this->db->insert($this->table, $data);
+    }
+    public function save_log($data)
+    {
+        $this->db->insert('db_logs.tb_customer_log', $data);
+        return $this->db->insert_id();
+    }
+    public function update($where, $save_data)
+    {
+        $this->db->update($this->table, $save_data, $where);
+        return $this->db->affected_rows();
+    }
+    public function delete_by_id($id)
+    {
+        $this->db->where('kodecus', $id);
+        $this->db->delete($this->table);
+    }
+    public function get_by_id($kodecus)
+    {
+        $this->db->from($this->table);
+        $this->db->where('kodecus', $kodecus);
+        $query = $this->db->get();
+
+        return $query->row();
+    }
+    public function delete_by_id_customerlogs($id)
+    {
+        $this->db->where('TRANS_ID', $id);
+        $this->db->delete('db_logs.tb_customer_log');
     }
 }

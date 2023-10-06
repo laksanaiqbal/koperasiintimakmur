@@ -19,48 +19,25 @@
             <div class="card-body">
                 <form class="theme-form">
                     <div class="mb-3 row">
-                        <label class="col-sm-3 col-form-label" for="txt_nmkary">Item Name</label>
-                        <div class="col-sm-9">
-                            <?php
-                            $this->db->select("kodecus,namacus");
-                            $this->db->from('customer a');
-                            $this->db->order_by('kodecus', 'ASC');
-                            $customers = $this->db->get(); ?>
-                            <select id="txt_nmkary" name="txt_nmkary">
-                                <option value="">Silahkan Pilih</option>
-                                <?php
-                                foreach ($customers->result() as $rowcustomers) {
-                                    echo "<option value='$rowcustomers->kodecus'>$rowcustomers->namacus</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="mb-3 row">
-                        <div class="col-sm-7">
-                        </div>
                         <div class="col-sm-5">
-                            <button id="btn_reset" class="btn btn-pill btn-outline-info btn-air-info" type="button" title="btn btn-pill btn-outline-info btn-air-info"><i class="fa fa-refresh"> Reload
-                                    Record</i></button>
-                            <button id="btn_cari" class="btn btn-pill btn-outline-info btn-air-info" type="button" title="btn btn-pill btn-outline-info btn-air-info"><i class="fa fa-send-o"> Find
-                                    Record</i></button>
+                            <button id="btn_input" class="btn btn-pill btn-outline-info btn-air-info" type="button" title="btn btn-pill btn-outline-info btn-air-info"><i class="fa fa-plus-square">
+                                    Input Customer </i></button>
                         </div>
                     </div>
                 </form>
-                <hr>
                 <div class="table-responsive">
-                    <!-- <table class="display" id="export-button"> -->
                     <table class="display" id="datatable_list">
                         <div id="button"></div>
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Action</th>
                                 <th>Kode Cust</th>
                                 <th>Nama</th>
                                 <th>Alamat</th>
                                 <th>Posisi</th>
                                 <th>Nomor HP</th>
+                                <th>Debit Limit</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -69,11 +46,13 @@
                         <tfoot>
                             <tr>
                                 <th>#</th>
+                                <th>Action</th>
                                 <th>Kode Cust</th>
                                 <th>Nama</th>
                                 <th>Alamat</th>
                                 <th>Posisi</th>
                                 <th>Nomor HP</th>
+                                <th>Debit Limit</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -82,27 +61,27 @@
         </div>
     </div>
 </div>
+<?php $this->load->view('customer/add') ?>
+<?php $this->load->view('customer/edit') ?>
+<?php $this->load->view('customer/logger') ?>
+
 
 <script type="text/javascript">
     var table;
     $(document).ready(function(e) {
         table = $('#datatable_list').DataTable({
-            // "lengthMenu": [
-            //     [10, 25, 50, -1],
-            //     [10, 25, 50, "All"]
-            // ],
+
             "lengthMenu": [
                 [50, 75, 100, -1],
                 [50, 75, 100, "All"]
             ],
-            // "pagingType": "full_numbers",
             "oLanguage": {
                 "sProcessing": '<center><img alt src="<?php echo base_url('assets/mt/assets/images/loading/loading-4.gif'); ?>" style="opacity: 1.0;filter: alpha(opacity=100);"></center>'
             },
             "processing": true, //Feature control the processing indicator.
             "serverSide": true, //Feature control DataTables' server-side processing mode.
             "searching": true,
-            "autoWidth": false,
+            "autoWidth": true,
             "info": true,
             // "scrollY": 455,
             "scrollX": true,
@@ -144,11 +123,101 @@
         scrollWin();
     });
 
-    function scrollWin() {
-        window.scrollBy(0, 500);
-    };
+
     $('#btn_input').click(function() { //button filter event click
-        $('#frm_input').modal('show'); // show bootstrap modal when complete loaded
-        $('.modal-title').text('  Add User Kuya'); // Set Title to Bootstrap modal title
+        $('#frmInput').modal('show'); // show bootstrap modal when complete loaded
+        $('.modal-title').text('  Tambah Customer'); // Set Title to Bootstrap modal title
+        $('[name="txt_input_level"]').val(null).trigger('change');
+        $('[name="txt_input_employee"]').val(null).trigger('change');
     });
+
+    function edit_data(kodecus) {
+        $('.form-group').removeClass('has-error'); // clear error class
+        $('.help-block').empty(); // clear error string
+        // alert(kodecus);
+        //Ajax Load data from ajax
+        $.ajax({
+            url: "<?php echo site_url('C_customer/ajax_edit') ?>/" + kodecus,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data) {
+                $('[name="kodecus"]').val(data.kodecus);
+                $('[name="namacus"]').val(data.namacus);
+                $('[name="alamat"]').val(data.alamat);
+                $('[name="jabatan"]').val(data.kota);
+                $('[name="hp"]').val(data.hp);
+                $('[name="limit"]').val(data.batas);
+
+                $('#frmEdit').modal('show'); // show bootstrap modal when complete loaded
+                $('.modal-title').text('Edit Data Pegawai'); // Set Title to Bootstrap modal title
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
+    }
+
+    function delete_data(id) {
+        var data_id = id;
+        var urls = '<?= site_url("C_customer/delete_permanen/"); ?>';
+        swal({
+                title: "Are you sure?",
+                text: "Do you realy want to delete permanen this imaginary file?! Once deleted, you will not be able to recover this imaginary file!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: 'POST',
+                        url: urls + data_id,
+                        dataType: "JSON",
+                        success: function(data) {
+                            if (data.is_error == true) {
+                                swal('Oopps', data.error_message, 'error');
+                            } else {
+                                swal({
+                                    title: "Info",
+                                    text: "Good luck Bro, data telah berhasil di delete permanen .",
+                                    type: "success",
+                                    showConfirmButton: false,
+                                    timer: 1111
+                                });
+                            }
+                            table.ajax.reload();
+                        },
+                        error: function(data) {
+                            swal("NOT Disabled!", "Something blew up.", "error");
+                        }
+                    });
+                } else {
+                    swal("Your imaginary file is still disable!");
+                }
+            })
+    }
+
+    function data_logger(kodecus) {
+        // $('#frmModal')[0].reset(); // reset form on modals
+        $('.form-group').removeClass('has-error'); // clear error class
+        $('.help-block').empty(); // clear error string
+        //Ajax Load data from ajax
+        $.ajax({
+            url: "<?php echo site_url('C_customer/ajax_logger_edit') ?>/" + kodecus,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data) {
+                $('[name="idtemp"]').val(data.TRANS_ID);
+                $('[name="txt_transID"]').val(data.TRANS_ID);
+                $('[name="txt_transDesc"]').val(data.TRANS_DESC);
+                $('.modal-title').text('  Master Barang Logger'); // Set Title to Bootstrap modal title
+                $('#frmLogger').modal('show'); // show bootstrap modal when complete loaded
+                table_logger.ajax.reload(null);
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
+    }
 </script>

@@ -115,3 +115,4 @@ $db['dblogins'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
+//just to connect db_logs

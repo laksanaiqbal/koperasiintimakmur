@@ -1,4 +1,5 @@
 <?php
+
 namespace Dompdf\Frame;
 
 use Iterator;
@@ -7,7 +8,7 @@ use Dompdf\Frame;
 /**
  * Pre-order Iterator
  *
- * Returns frames in preorder traversal order (parent then children)
+ * Returns frames in Epembelian traversal order (parent then children)
  *
  * @access private
  * @package dompdf
@@ -93,4 +94,3 @@ class FrameTreeIterator implements Iterator
         return $b;
     }
 }
-

@@ -5,8 +5,8 @@ class M_suplier extends CI_Model
 {
 
     var $table = 'suplier';
-    var $column_order = array(null, 'a.kodesup', 'a.namasup', 'a.alamat', 'a.telepon', 'a.namaproduk'); //set column field database for datatable orderable
-    var $column_search = array('a.kodesup', 'a.namasup', 'a.alamat', 'a.telepon', 'a.namaproduk'); //set column field database for datatable searchable 
+    var $column_order = array(null, 'a.kodesup', 'a.namasup', 'a.alamat', 'a.telepon', 'a.namaproduk', 'a.ACBank', 'a.Bank', 'a.atasnama', 'a.nilai'); //set column field database for datatable orderable
+    var $column_search = array('a.kodesup', 'a.namasup', 'a.alamat', 'a.telepon', 'a.namaproduk', 'a.ACBank', 'a.Bank', 'a.atasnama', 'a.nilai'); //set column field database for datatable searchable 
     var $order = array('a.namasup' => 'asc'); // default order 
 
     public function __construct()
@@ -15,11 +15,16 @@ class M_suplier extends CI_Model
         $this->load->database();
     }
 
+    public function getdata()
+    {
+        $query = $this->db->query("SELECT * FROM suplier ORDER BY namasup ASC");
+        return $query->result();
+    }
     private function _get_datatables_query()
     {
         $month = date('m') - 3;
         $years = date('Y');
-        $this->db->select("a.kodesup, a.namasup, a.alamat, a.telepon, a.namaproduk");
+        $this->db->select("a.kodesup, a.namasup, a.alamat, a.telepon, a.namaproduk,a.ACBank, a.Bank, a.atasnama, a.nilai");
         $this->db->from('suplier a');
         // $this->db->where('year(a.tanggal)', $years);
         $i = 0;
@@ -81,16 +86,40 @@ class M_suplier extends CI_Model
         // die(var_dump($query->num_rows()));
         return $query->num_rows();
     }
-    public function count_all($params)
+    public function count_all()
     {
         // $this->db->from($this->table);
         $this->_get_datatables_query();
-        $month = date('m');
-        $years = date('Y');
-        //jika parameter yang di set txt_nmkary 
         if (isset($params['txt_nmkary'])) {
-            $this->db->where('a.kodesup', $params['txt_nmkary']);
+            $this->db->like('a.kodesup', $params['txt_nmkary']);
         }
         return $this->db->count_all_results();
+    }
+    public function save($data)
+    {
+        $this->db->insert($this->table, $data);
+    }
+    public function save_log($data)
+    {
+        $this->db->insert('db_logs.tb_suplier_log', $data);
+        return $this->db->insert_id();
+    }
+    public function update($where, $save_data)
+    {
+        $this->db->update($this->table, $save_data, $where);
+        return $this->db->affected_rows();
+    }
+    public function delete_by_id($id)
+    {
+        $this->db->where('kodesup', $id);
+        $this->db->delete($this->table);
+    }
+    public function get_by_id($kodesup)
+    {
+        $this->db->from($this->table);
+        $this->db->where('kodesup', $kodesup);
+        $query = $this->db->get();
+
+        return $query->row();
     }
 }

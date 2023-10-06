@@ -32,14 +32,15 @@
 								<!-- <li><a href="<?php echo site_url('C_user_login'); ?>">User</a>
 	                            </li> -->
 								<li>
-									<a href="<?php echo site_url('c_customer'); ?>">Pegawai</a>
-								</li>
-								<li>
 									<a href="<?php echo site_url('C_masterbarang'); ?>">Master Barang</a>
 								</li>
 								<li>
-									<a href="<?php echo site_url('C_daftardepartemen'); ?>">Daftar Departemen</a>
+									<a href="<?php echo site_url('c_customer'); ?>">Customer</a>
 								</li>
+
+								<!-- <li>
+									<a href="<?php echo site_url('C_daftardepartemen'); ?>">Daftar Departemen</a>
+								</li> -->
 								<li>
 									<a href="<?php echo site_url('C_kelompokbarang'); ?>">Kelompok Barang</a>
 								</li>
@@ -48,6 +49,28 @@
 								</li>
 								<li>
 									<a href="<?php echo site_url('c_suplier'); ?>">Daftar Suplier</a>
+								</li>
+							</ul>
+						</li>
+						<li class="sidebar-list">
+							<label class="badge badge-light-primary">6</label><a class="sidebar-link sidebar-title" href="#"><i data-feather="Box"></i><span> Purchasing</span></a>
+							<ul class="sidebar-submenu">
+								<!-- <li><a href="<?php echo site_url('C_user_login'); ?>">User</a>
+	                            </li> -->
+								<li>
+									<a href="<?php echo site_url('C_pembelian'); ?>">Purchase List</a>
+								</li>
+								<li>
+									<a href="<?php echo site_url('C_Epenjualan'); ?>">Enrty Penjualan</a>
+								</li>
+								<li>
+									<a href="<?php echo site_url('C_penjualan'); ?>">Daftar Penjualan</a>
+								</li>
+								<li>
+									<a href="<?php echo site_url('C_GoodReceipt'); ?>">Good Receipt</a>
+								</li>
+								<li>
+									<a href="<?php echo site_url('C_Return'); ?>">Return</a>
 								</li>
 							</ul>
 						</li>

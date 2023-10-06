@@ -15,29 +15,29 @@
                      <div class="card-body">
                          <form method="POST" id="frm_Edit" class="theme-form">
                              <input type="hidden" name="idupdate" id="idupdate">
-                             <div class="mb-3 row">
-                                 <label style="color: white;" class="col-sm-3 col-form-label" for="txt_input_kodebrg">Kode Barang</label>
-                                 <div class="col-sm-6">
-                                     <input type="hidden" class="form-control" id="txt_input_kodebrg" name="txt_input_kodebrg" type="text" placeholder="Type Name Here">
-                                 </div>
-                             </div>
-                             <div class="mb-3 row">
-                                 <label class="col-sm-3 col-form-label" for="txt_input_barcode">Barcode</label>
-                                 <div class="col-sm-6">
-                                     <input class="form-control" id="txt_input_barcode" name="txt_input_barcode" type="text" placeholder="Type Barcode Here">
-                                 </div>
-                             </div>
-                             <div class="mb-3 row">
-                                 <label class="col-sm-3 col-form-label" for="txt_input_namabrg">Nama Barang</label>
+                             <div class="mb-3 row" hidden>
+                                 <label class="col-sm-3 col-form-label" for="kodebrg">Kode Barang</label>
                                  <div class="col-sm-9">
-                                     <input class="form-control" id="txt_input_namabrg" name="txt_input_namabrg" type="text" placeholder="Type Name Here">
+                                     <input class="form-control" id="kodebrg" name="kodebrg" type="text" placeholder="Type Kode Here" required>
+                                 </div>
+                             </div>
+                             <div class="mb-3 row">
+                                 <label class="col-sm-3 col-form-label" for="barcode">Barcode</label>
+                                 <div class="col-sm-9">
+                                     <input class="form-control" id="barcode" name="barcode" type="text" placeholder="Type Barcode Here" required>
+                                 </div>
+                             </div>
+                             <div class="mb-3 row">
+                                 <label class="col-sm-3 col-form-label" for="namabrg">Nama Barang</label>
+                                 <div class="col-sm-9">
+                                     <input class="form-control" id="namabrg" name="namabrg" type="text" placeholder="Type Name Here" required>
                                  </div>
                              </div>
 
                              <div class="mb-3 row">
-                                 <label class="col-sm-3 col-form-label" for="txt_input_kelompok">Kategori</label>
+                                 <label class="col-sm-3 col-form-label" for="kelompok">Kategori</label>
                                  <div class="col-sm-9">
-                                     <select name="txt_input_kelompok" id="txt_input_kelompok">
+                                     <select name="kelompok" id="kelompok">
                                          <option value="">--pilih--</option>
                                          <?php foreach ($datakelompok as $data) : ?>
                                              <option value="<?= $data->kodeklmpk ?>"><?php echo "$data->namaklmpk"  ?></option>
@@ -46,23 +46,10 @@
                                  </div>
                              </div>
 
-
-
-                             <!-- <div class="mb-3 row">
-                                 <label class="col-sm-3 col-form-label" for="txt_input_dept">Departemen</label>
-                                 <div class="col-sm-9">
-                                     <select name="txt_input_dept" id="txt_input_dept">
-                                         <option value="">--pilih--</option>
-                                         <?php foreach ($datadept as $data) : ?>
-                                             <option value="<?php echo $data->idcabang ?>"><?php echo $data->namacabang ?></option>
-                                         <?php endforeach ?>
-                                     </select>
-                                 </div>
-                             </div> -->
                              <div class="mb-3 row">
-                                 <label class="col-sm-3 col-form-label" for="txt_input_satuan">Satuan</label>
+                                 <label class="col-sm-3 col-form-label" for="satuan">Satuan</label>
                                  <div class="col-sm-9">
-                                     <select name="txt_input_satuan" id="txt_input_satuan">
+                                     <select name="satuan" id="satuan">
                                          <option value="">--pilih--</option>
                                          <?php foreach ($datasat as $data) : ?>
                                              <option value="<?php echo $data->kodesat ?>"><?php echo $data->namasat ?></option>
@@ -71,27 +58,55 @@
                                  </div>
                              </div>
                              <div class="mb-3 row">
-                                 <label class="col-sm-3 col-form-label" for="txt_input_stokakhir">Stok</label>
+                                 <label class="col-sm-3 col-form-label" for="stokawal">Stok</label>
                                  <div class="col-sm-9">
-                                     <input class="form-control" id="txt_input_stokakhir" name="txt_input_stokakhir" type="text" placeholder="Type Stock Here">
+                                     <input class="form-control" id="stokawal" name="stokawal" type="number" placeholder="Type Stock Here" readonly>
                                  </div>
                              </div>
                              <div class="mb-3 row">
-                                 <label class="col-sm-3 col-form-label" for="txt_input_hpp">HPP</label>
+                                 <label class="col-sm-3 col-form-label" for="stokmin">Stok Min</label>
                                  <div class="col-sm-9">
-                                     <input class="form-control" id="txt_input_hpp" name="txt_input_hpp" type="text" placeholder="Type HPP Here">
+                                     <input class="form-control" id="stokmin" name="stokmin" type="number" placeholder="Type Stock Min Here">
                                  </div>
                              </div>
                              <div class="mb-3 row">
-                                 <label class="col-sm-3 col-form-label" for="txt_input_hjual">Price</label>
+                                 <label class="col-sm-3 col-form-label" for="stokmax">Stok Max</label>
                                  <div class="col-sm-9">
-                                     <input class="form-control" id="txt_input_hjual" name="txt_input_hjual" type="text" placeholder="Type Price Here">
+                                     <input class="form-control" id="stokmax" name="stokmax" type="number" placeholder="Type Stock Max Here">
+                                 </div>
+                             </div>
+                             <div class="mb-3 row">
+                                 <label class="col-sm-3 col-form-label" for="stokakhir">Tambah Stok</label>
+                                 <div class="col-sm-9">
+                                     <input class="form-control" id="stokakhir" name="stokakhir" type="number" placeholder="Type Stock Here">
+                                 </div>
+                             </div>
+                             <div class="mb-3 row">
+                                 <label class="col-sm-3 col-form-label" for="hpp">HPP</label>
+                                 <div class="col-sm-9">
+                                     <input class="form-control" id="hpp" name="hpp" type="number" placeholder="Type HPP Here" required>
+                                 </div>
+                             </div>
+                             <div class="mb-3 row">
+                                 <label class="col-sm-3 col-form-label" for="hjual">Price</label>
+                                 <div class="col-sm-9">
+                                     <input class="form-control" id="hjual" name="hjual" type="number" placeholder="Type Price Here" required>
+                                 </div>
+                             </div>
+                             <div class="mb-2 row">
+                                 <label class="col-sm-3 col-form-label" for="kodekategori">Kategori</label>
+                                 <div class="col-sm-9">
+                                     <div class="checkbox">
+                                         <input type="radio" name="kodekategori" id="kodekategori" value="1" checked> NON-KONSINYASI
+                                         <input type="radio" name="kodekategori" id="kodekategori" value="2"> KONSINYASI
+                                     </div>
                                  </div>
                              </div>
                              <div class="mb-3 row">
                                  <label class="col-sm-3 col-form-label" for="gambar1">Gambar</label>
-                                 <div class="col-sm-9">
-                                     <input class="form-control" id="gambar1" name="gambar1" type="file">
+                                 <div class="col-sm-3">
+                                     <img class="img-preview img-fluid" style="Width: 200px">
+                                     <input class="form-control" id="image" name="gambar1" type="file" onchange="previewImage()">
                                  </div>
                              </div>
                              <div class="card-footer text-end">
@@ -106,13 +121,16 @@
          </div>
      </div>
  </div>
- </div>
- <!-- </div>
- </div> -->
- <script type="text/javascript">
-     $(document).ready(function(e) {
 
-     });
+ <script type="text/javascript">
+     //  $(document).ready(function(e) {
+     //      $("#kelompok").select2({
+     //          dropdownParent: $("#frmEdit")
+     //      });
+     //      $("#satuan").select2({
+     //          dropdownParent: $("#frmEdit")
+     //      });
+     //  });
      $('#frm_Edit').submit(function(e) {
          urls = "<?php echo site_url('C_masterbarang/update_proses') ?>";
          // var data = $(this).serialize();

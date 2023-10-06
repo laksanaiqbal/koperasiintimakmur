@@ -17,8 +17,6 @@ class M_satuan extends CI_Model
     public function getdata()
     {
         $query = $this->db->query("SELECT * FROM satuan ORDER BY namasat ASC");
-
-
         return $query->result();
     }
     private function _get_datatables_query()
@@ -98,5 +96,32 @@ class M_satuan extends CI_Model
             $this->db->where('a.kodesat', $params['txt_nmkary']);
         }
         return $this->db->count_all_results();
+    }
+    public function save($data)
+    {
+        $this->db->insert($this->table, $data);
+    }
+    public function save_log($data)
+    {
+        $this->db->insert('inv.satuan', $data);
+        return $this->db->insert_id();
+    }
+    public function update($where, $save_data)
+    {
+        $this->db->update($this->table, $save_data, $where);
+        return $this->db->affected_rows();
+    }
+    public function delete_by_id($id)
+    {
+        $this->db->where('kodesat', $id);
+        $this->db->delete($this->table);
+    }
+    public function get_by_id($kodesat)
+    {
+        $this->db->from($this->table);
+        $this->db->where('kodesat', $kodesat);
+        $query = $this->db->get();
+
+        return $query->row();
     }
 }
