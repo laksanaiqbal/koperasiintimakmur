@@ -27,13 +27,11 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Kode Detail Beli</th>
                                         <th>Nama Barang</th>
                                         <th>qty</th>
                                         <th>Satuan</th>
                                         <th>Total</th>
                                         <th>Status</th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
                             </table>

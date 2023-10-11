@@ -4,10 +4,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class M_penjualan extends CI_Model
 {
 
-    var $table = 'detail_penjualan';
-    var $column_order = array(null, 'a.id_detail', 'a.id_jual', 'a.id_barang', 'a.id_servis',  'a.diskon', 'a.hjual', 'a.qty', 'a.total'); //set column field database for datatable orderable
-    var $column_search = array('a.id_detail', 'a.id_jual', 'a.id_barang', 'a.id_servis',  'a.diskon', 'a.hjual', 'a.qty', 'a.total'); //set column field database for datatable searchable 
-    var $order = array('a.id_detail' => 'asc'); // default order 
+    var $table = 'djual';
+    var $column_order = array(null, 'a.iddjual', 'a.nojual', 'a.kodebrg', 'a.unit',  'a.disc', 'a.hjual1', 'a.qtyjual', 'a.brutto'); //set column field database for datatable orderable
+    var $column_search = array('a.iddjual', 'a.nojual', 'a.kodebrg', 'a.unit',  'a.disc', 'a.hjual1', 'a.qtyjual', 'a.brutto'); //set column field database for datatable searchable 
+    var $order = array('a.iddjual' => 'asc'); // default order 
 
     public function __construct()
     {
@@ -16,17 +16,17 @@ class M_penjualan extends CI_Model
     }
     public function getdata()
     {
-        $query = $this->db->query("SELECT * FROM detail_penjualan ORDER BY id_detail ASC");
+        $query = $this->db->query("SELECT * FROM djual ORDER BY iddjual ASC");
         return $query->result();
     }
     private function _get_datatables_query()
     {
         $month = date('m') - 3;
         $years = date('Y');
-        $this->db->select("a.id_detail, a.id_jual,b.namabrg,b.kodebrg,b.barcode, b.hbeli1,b.hjual1, a.id_barang, a.kode_detail, a.hjual, a.qty,a.total");
-        $this->db->from('detail_penjualan a');
-        $this->db->where("a.id_jual='0'");
-        $this->db->join('barang b', 'a.id_barang=b.kodebrg');
+        $this->db->select("a.iddjual, a.nojual,b.namabrg,b.kodebrg,b.barcode, b.hbeli1,b.hjual1, a.kodebrg, a.hjual1, a.qtyjual,a.brutto");
+        $this->db->from('djual a');
+        $this->db->where("a.nojual='0'");
+        $this->db->join('barang b', 'a.kodebrg=b.kodebrg');
         $i = 0;
 
         foreach ($this->column_search as $item) // loop column 
@@ -59,7 +59,7 @@ class M_penjualan extends CI_Model
     {
         $this->_get_datatables_query();
         if (isset($params['txt_transID'])) {
-            $this->db->where('a.id_jual', $params['txt_transID']);
+            $this->db->where('a.nojual', $params['txt_transID']);
         }
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
@@ -70,7 +70,7 @@ class M_penjualan extends CI_Model
     {
         $this->_get_datatables_query();
         if (isset($params['txt_transID'])) {
-            $this->db->where('a.id_jual', $params['txt_transID']);
+            $this->db->where('a.nojual', $params['txt_transID']);
         }
 
         $query = $this->db->get();
@@ -80,7 +80,7 @@ class M_penjualan extends CI_Model
     {
         $this->_get_datatables_query();
         if (isset($params['txt_transID'])) {
-            $this->db->where('a.id_jual', $params['txt_transID']);
+            $this->db->where('a.nojual', $params['txt_transID']);
         }
         return $this->db->count_all_results();
     }
@@ -90,7 +90,7 @@ class M_penjualan extends CI_Model
     }
     public function save_penjualan($data)
     {
-        $this->db->insert('inv.penjualan', $data);
+        $this->db->insert('inv.hjual', $data);
     }
 
     public function save_log($data)
@@ -105,15 +105,15 @@ class M_penjualan extends CI_Model
     }
     public function delete_by_id($id)
     {
-        $this->db->where('id_detail', $id);
+        $this->db->where('iddjual', $id);
         $this->db->delete($this->table);
     }
     public function get_by_id($id)
     {
-        $this->db->select("a.id_detail, a.id_jual, b.namabrg, b.kodebrg, a.id_barang,a.id_servis,a.diskon,a.hjual, a.qty, a.total");
-        $this->db->from('detail_penjualan a');
-        $this->db->join('barang b', 'a.id_barang=b.kodebrg');
-        $this->db->where('id_jual', $id);
+        $this->db->select("a.iddjual, a.nojual, b.namabrg, b.kodebrg, a.kodebrg,a.unit,a.disc,a.hjual1, a.qtyjual, a.brutto");
+        $this->db->from('djual a');
+        $this->db->join('barang b', 'a.kodebrg=b.kodebrg');
+        $this->db->where('nojual', $id);
         $query = $this->db->get();
         return $query->row();
     }
@@ -124,13 +124,13 @@ class M_penjualan extends CI_Model
     }
     public function get_PO($id)
     {
-        $PO = $this->db->query("SELECT * FROM inv.detail_penjualan WHERE id_detail='$id'");
+        $PO = $this->db->query("SELECT * FROM inv.djual WHERE iddjual='$id'");
         return $PO->row();
     }
     public function get_sum()
     {
-        $PO = "SELECT sum(total) as total FROM inv.detail_penjualan WHERE id_jual='0'";
+        $PO = "SELECT sum(brutto) as brutto FROM inv.djual WHERE nojual='0'";
         $result = $this->db->query($PO);
-        return $result->row()->total;
+        return $result->row()->brutto;
     }
 }

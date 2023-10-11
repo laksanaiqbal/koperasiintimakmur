@@ -12,16 +12,16 @@
                     <!-- <div class="card"> -->
                     <div class="card-body">
                         <form method="POST" id="frm_Edit" class="theme-form">
-                            <div class="mb row" hidden>
+                            <div class="mb row">
                                 <label class="col-sm-2 col-form-label" for="id_detail">ID</label>
                                 <div class="col-sm-9">
                                     <input class="form-control" id="id_detail" name="id_detail" type="number" placeholder="Type Nama Here" readonly>
                                 </div>
                             </div>
                             <div class="mb row">
-                                <label class="col-sm-2 col-form-label" for="namabarang">Nama</label>
+                                <label class="col-sm-2 col-form-label" for="namabrg">Nama</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" id="namabarang" name="namabarang" type="text" placeholder="Type Nama Here" readonly>
+                                    <input class="form-control" id="namabrg" name="namabrg" type="text" placeholder="Type Nama Here" readonly>
                                 </div>
                             </div>
                             <div class="mb row">
@@ -40,6 +40,12 @@
                                 <label class="col-sm-2 col-form-label" for="jumlah">QTY</label>
                                 <div class="col-sm-9">
                                     <input class="form-control" id="jumlah" name="jumlah" type="number" placeholder="Type Jumlah Here">
+                                </div>
+                            </div>
+                            <div class="mb row" hidden>
+                                <div class="col-sm-9">
+                                    <input class="form-control" id="brutto" name="brutto" type="number" placeholder="Type brutto Here">
+                                    <input class="form-control" id="nobeli" name="nobeli" type="number" placeholder="Type nobeli Here">
                                 </div>
                             </div>
                             <div class="card-footer text-end">
@@ -89,7 +95,8 @@
                         timer: 1999,
                         type: "success"
                     });
-                    table.ajax.reload();
+                    table_edit.ajax.reload();
+                    table_pembelian.ajax.reload();
                     document.getElementById("frm_Edit").reset();
                     $('#frmEdit').modal('hide');
                 }

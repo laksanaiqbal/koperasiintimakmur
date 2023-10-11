@@ -60,9 +60,9 @@
 								<li>
 									<a href="<?php echo site_url('C_pembelian'); ?>">Purchase List</a>
 								</li>
-								<li>
+								<!-- <li>
 									<a href="<?php echo site_url('C_Epenjualan'); ?>">Enrty Penjualan</a>
-								</li>
+								</li> -->
 								<li>
 									<a href="<?php echo site_url('C_penjualan'); ?>">Daftar Penjualan</a>
 								</li>

@@ -13,89 +13,103 @@
                         <div class="card-body">
                             <div class="stok">
                                 <form method="POST" id="inputFrm" class="theme-form" enctype="multipart/form-data">
-                                    <div class="row" style="text-align: center;">
-                                        <div class="mb-2 row">
-                                            <button id="btn_show" type="button" class="btn btn-primary"><i class="fa fa-search"> Barang</i></button>
+                                    <div class="mb-2 row">
+                                        <label class="col-md-3 col-form-label" for="cabang">Cabang</label>
+                                        <div class="col-md-9">
+                                            <select name="cabang" id="cabang" class="form-control select2">
+                                                <?php foreach ($datacabang as $data) : ?>
+                                                    <option value="<?php echo $data->idcabang ?>"><?php echo $data->namacabang ?></option>
+                                                <?php endforeach ?>
+                                            </select>
                                         </div>
-                                        <br>
-                                        <div class="mb-2 row">
-                                            <div class="checkbox">
-                                                <input style="margin-right: 0px;" type="radio" name="layanan" id="layanan" value="1" checked> Product
-                                                <input style="margin-left: 50px;" type="radio" name="layanan" id="layanan" value="2"> Jasa
-                                            </div>
+                                    </div>
+                                    <div class="mb-2 row">
+                                        <label class="col-md-3 col-form-label" for="payment">Payment</label>
+                                        <div class="col-md-9">
+                                            <select name="payment" id="payment" class="form-control select2">
+                                                <option value="0">Cash</option>
+                                                <option value="1">Hutang</option>
+                                            </select>
                                         </div>
-                                        <div class="mb-2 row">
-                                            <input hidden class="form-control" id="kodebrg" name="kodebrg" type="text" placeholder="kode Barang">
+                                    </div>
+                                    <div class="mb-2 row">
+                                        <label class="col-sm-3 col-form-label" for="namacus">Cust</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="namacus" id="namacus">
+                                                <option value="1">UMUM</option>
+                                                <?php foreach ($datacus as $data) : ?>
+                                                    <option value="<?php echo $data->kodecus ?>"><?php echo $data->namacus ?></option>
+                                                <?php endforeach ?>
+                                            </select>
                                         </div>
-                                        <div class="mb-2 row">
-                                            <input class="form-control" id="namabrg" name="namabrg" type="text" placeholder="Nama Barang">
+                                    </div>
+                                    <div class="mb-2 row">
+                                        <button id="btn_show" type="button" class="btn btn-primary"><i class="fa fa-search"> Barang</i></button>
+                                    </div>
+                                    <br>
+                                    <div class="mb-2 row" style="text-align: center;">
+                                        <div class="checkbox">
+                                            <input style="margin-right: 0px;" type="radio" name="layanan" id="layanan" value="1" checked> Product
+                                            <input style="margin-left: 50px;" type="radio" name="layanan" id="layanan" value="2"> Jasa
                                         </div>
-                                        <hr>
-                                        <div class="mb-2 row">
-                                            <input class="form-control" id="barcode" name="barcode" type="text" placeholder="Barcode Barang">
+                                    </div>
+                                    <div class="mb-2 row">
+                                        <input hidden class="form-control" id="kodebrg" name="kodebrg" type="text" placeholder="kode Barang">
+                                    </div>
+                                    <div class="mb-2 row">
+                                        <input class="form-control" id="namabrg" name="namabrg" type="text" placeholder="Nama Barang">
+                                    </div>
+                                    <hr>
+                                    <div class="mb-2 row">
+                                        <input class="form-control" id="barcode" name="barcode" type="text" placeholder="Barcode Barang">
+                                    </div>
+                                    <hr>
+                                    <div class="mb-2 row">
+                                        <input class="form-control" id="hjual" name="hjual" type="text" placeholder="H Jual">
+                                    </div>
+                                    <hr>
+                                    <div class="mb-2 row">
+                                        <input class="form-control" id="jumlah" name="jumlah" type="text" placeholder="QTY">
+                                    </div>
+                                    <div class="mb-2 row" hidden>
+                                        <input class="form-control" id="stok" name="stok" type="text" placeholder="stok" readonly>
+                                        <input class="form-control" id="stokbaru" name="stokbaru" type="text" placeholder="stokbaru">
+                                    </div>
+                                    <hr>
+                                    <div class="mb-2 row" style="text-align: center;">
+                                        <div class="col-sm">
+                                            <button type="submit" id="btnSave" class="btn btn-pill btn-outline-primary-2x btn-air-primary">
+                                                <i class="fa fa-send-o"> Submit</i>
+                                            </button>
                                         </div>
-                                        <hr>
-                                        <div class="mb-2 row">
-                                            <input class="form-control" id="hjual" name="hjual" type="text" placeholder="H Jual">
-                                        </div>
-                                        <hr>
-                                        <div class="mb-2 row">
-                                            <input class="form-control" id="jumlah" name="jumlah" type="text" placeholder="QTY">
-                                        </div>
-                                        <div class="mb-2 row" hidden>
-                                            <input class="form-control" id="stok" name="stok" type="text" placeholder="stok" readonly>
-                                            <input class="form-control" id="stokbaru" name="stokbaru" type="text" placeholder="stokbaru">
-                                        </div>
-                                        <hr>
-                                        <div class="mb-2 row" style="text-align: center;">
-                                            <div class="col-sm">
-                                                <button type="submit" id="btnSave" class="btn btn-pill btn-outline-primary-2x btn-air-primary">
-                                                    <i class="fa fa-send-o">Submit</i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <br>
                                     </div>
                                 </form>
-                                <br>
                                 <div class="table-responsive">
                                     <table class="display" id="datatable_input">
+                                        <div id="button"></div>
                                         <thead>
                                             <tr>
-                                                <th>#</th>
-                                                <th>ID</th>
+                                                <th>No</th>
                                                 <th>ID Jual</th>
                                                 <th>Nama Barang</th>
-                                                <th>kode_detail</th>
-                                                <th>harga_jual</th>
+                                                <th>Harga Jual</th>
                                                 <th>qty</th>
                                                 <th>total</th>
                                             </tr>
                                         </thead>
-
-                                        <tfoot>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>ID</th>
-                                                <th>ID Jual</th>
-                                                <th>Nama Barang</th>
-                                                <th>kode_detail</th>
-                                                <th>harga_jual</th>
-                                                <th>qty</th>
-                                                <th>total</th>
-                                            </tr>
-                                        </tfoot>
                                     </table>
                                 </div>
+                                <br>
                                 <div class="mb-2 row" style="text-align: right;">
                                     <h2>TOTAL</h2>
+                                    <hr>
                                     <div id="sums">
                                         <h1><?php echo $sum; ?></h1>
                                         <input hidden value="<?php echo $sum; ?>" class="form-control" id="totals" name="totals" type="number" placeholder="Type Jumlah Here">
                                     </div>
                                 </div>
                                 <div class="mb-2 row">
-                                    <button type="button" id="btn_pay" class="btn btn-primary"><i class="fa fa-paper-plane-o m-right-xs"></i> Simpan</button>
+                                    <button type="button" id="btn_pay" class="btn btn-primary"><i class="fa fa-paper-plane-o m-right-xs"></i> Pay</button>
                                 </div>
                             </div>
                         </div>
@@ -107,13 +121,26 @@
 </div>
 
 <script>
+    $(document).ready(function(e) {
+        setInterval(function() {
+            $("#sums").load(window.location.href + " #sums");
+        }, 2500);
+        $("#cabang").select2({
+            dropdownParent: $("#forminput")
+        });
+        $("#namacus").select2({
+            dropdownParent: $("#forminput")
+        });
+        $("#payment").select2({
+            dropdownParent: $("#forminput")
+        });
+    })
     var sum;
     $(document).ready(function() {
         setInterval(function() {
             $("#sums").load(window.location.href + " #sums");
         }, 2500);
     });
-
     var table_input;
     $(document).ready(function(e) {
         table_input = $('#datatable_input').DataTable({
@@ -122,8 +149,8 @@
             //     [10, 25, 50, "All"]
             // ],
             "lengthMenu": [
-                [50, 75, 100, -1],
-                [50, 75, 100, "All"]
+                [10, 50, 75, 100, -1],
+                [10, 50, 75, 100, "All"]
             ],
             // "pagingType": "full_numbers",
             "oLanguage": {
@@ -138,7 +165,7 @@
             "scrollX": true,
             "order": [], //Initial no order.
             "ajax": {
-                "url": "<?php echo site_url('C_Epenjualan/ajax_list') ?>",
+                "url": "<?php echo site_url('C_penjualan/ajax_list_Epenjualan') ?>",
                 "type": "POST",
                 "data": function(data) {
                     $('#loader').hide();
@@ -155,28 +182,26 @@
                     "orderable": true, //set not orderable
                 },
             ],
-
-
         });
-        var buttons = new $.fn.dataTable.Buttons(table_input, {}).container().appendTo($('#buttoninput'));
+        var buttons = new $.fn.dataTable.Buttons(table, {}).container().appendTo($('#button'));
 
     })
 
-    function edit_data(id_detail) {
+    function edit_data(iddjual) {
         $('.form-group').removeClass('has-error'); // clear error class
         $('.help-block').empty(); // clear error string
         // alert(kodebrg);
         //Ajax Load data from ajax
         $.ajax({
-            url: "<?php echo site_url('C_Epembelian/ajax_edit') ?>/" + id_detail,
+            url: "<?php echo site_url('C_Epembelian/ajax_edit') ?>/" + iddjual,
             type: "GET",
             dataType: "JSON",
             success: function(data) {
                 $('[name="namabarang"]').val(data.namabrg);
-                $('[name="hargabeli"]').val(data.harga_beli);
-                $('[name="hargajual"]').val(data.harga_jual);
-                $('[name="jumlah"]').val(data.qty);
-                $('[name="id_detail"]').val(data.id_detail);
+                $('[name="hargabeli"]').val(data.hpp);
+                $('[name="hargajual"]').val(data.hjual1);
+                $('[name="jumlah"]').val(data.qtyjual);
+                $('[name="id_detail"]').val(data.iddjual);
 
                 $('#frmEdit').modal('show'); // show bootstrap modal when complete loaded
                 $('.modal-title').text('Edit Data Barang'); // Set Title to Bootstrap modal title
@@ -191,12 +216,11 @@
         var stok = parseInt($("#stok").val())
         var qty = parseInt($("#jumlah").val())
 
-
         var stokbaru = stok - qty;
         $("#stokbaru").attr("value", stokbaru)
     });
     $('#inputFrm').submit(function(e) {
-        urls = "<?php echo site_url('C_Epenjualan/input_proses') ?>";
+        urls = "<?php echo site_url('C_penjualan/input_proses') ?>";
         var data = new FormData($('#inputFrm')[0]);
         $.ajax({
             url: urls,
@@ -242,10 +266,6 @@
         e.preventDefault();
     });
 
-
-    function scrollWin() {
-        window.scrollBy(0, 500);
-    };
 
     function scrollWin() {
         window.scrollBy(0, 500);
@@ -336,6 +356,12 @@
         $('.modal-title').text('Payment'); // Set Title to Bootstrap modal title
         var totals = parseInt($("#totals").val())
         $("#total").attr("value", totals)
+        var cabang = parseInt($("#cabang").val())
+        $("#cabangs").attr("value", cabang)
+        var payment = parseInt($("#payment").val())
+        $("#payments").attr("value", payment)
+        var namacus = parseInt($("#namacus").val())
+        $("#namacust").attr("value", namacus)
     });
 
     function pilihbarang(kodebrg) {
@@ -373,50 +399,4 @@
             }
         });
     }
-    // $('#simpanjual').submit(function(e) {
-    //     urls = "<?php echo site_url('C_Epenjualan/simpan_penjualan') ?>";
-    //     var data = new FormData($('#simpanjual')[0]);
-    //     $.ajax({
-    //         url: urls,
-    //         type: 'POST',
-    //         data: data,
-    //         async: false,
-    //         cache: false,
-    //         contentType: false,
-    //         processData: false,
-    //         success: function(data) {
-    //             var out = jQuery.parseJSON(data);
-    //             if (out.is_error == true) {
-    //                 swal({
-    //                     title: 'Error Bro',
-    //                     text: out['error_message'],
-    //                     showConfirmButton: false,
-    //                     html: true,
-    //                     timer: 1999,
-    //                     type: "error"
-    //                 });
-    //             } else {
-    //                 swal({
-    //                     title: 'Hore',
-    //                     text: out['succes_message'],
-    //                     showConfirmButton: false,
-    //                     timer: 1999,
-    //                     type: "success"
-    //                 });
-    //                 table.ajax.reload(null, false);
-    //                 document.getElementById("simpanjual").reset();
-    //                 $('#simpanjual').modal('hide');
-    //             }
-    //         },
-    //         error: function(jqXHR, textStatus, errorThrown) {
-    //             swal({
-    //                 title: 'Crash Bro',
-    //                 showConfirmButton: false,
-    //                 timer: 1999,
-    //                 type: "error"
-    //             });
-    //         }
-    //     });
-    //     e.preventDefault();
-    // });
 </script>

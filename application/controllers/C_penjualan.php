@@ -27,6 +27,7 @@ class C_penjualan extends CI_Controller
         $this->load->model('M_customer');
         $this->load->model('M_penjualan');
         $this->load->model('M_detailpenjualan');
+        $this->load->model('M_daftardepartemen');
     }
     public function index()
     {
@@ -41,6 +42,8 @@ class C_penjualan extends CI_Controller
         $data['Epenjualan'] = $this->M_penjualan->getdata();
         $data['sum'] = $this->M_penjualan->get_sum();
         $data['datacus'] = $this->M_customer->getdata();
+        $data['datacabang'] = $this->M_daftardepartemen->getdata();
+
 
 
         $this->load->view('template/header');
@@ -53,28 +56,38 @@ class C_penjualan extends CI_Controller
         $start  = $_REQUEST['start']; //tambahan limit
         $length = $_REQUEST['length'];
         $params = array();
-        if ($this->input->post('txt_nmkary')) {
-            $params['txt_nmkary'] = $this->input->post('txt_nmkary');
+        if ($this->input->post('nojual')) {
+            $params['nojual'] = $this->input->post('nojual');
         }
+        if ($this->input->post('kodecus')) {
+            $params['kodecus'] = $this->input->post('kodecus');
+        }
+        if ($this->input->post('txt_tgl_start')) {
+            $params['txt_tgl_start'] = $this->input->post('txt_tgl_start');
+        }
+        if ($this->input->post('txt_tgl_end')) {
+            $params['txt_tgl_end'] = $this->input->post('txt_tgl_end');
+        }
+
         if ($length != -1) {
             $params['limit'] = $length; //tambahan limit
             $params['start'] = $start;
         }
 
         $list = $this->M_Dpenjualan->get_datatables($params);
-        // $kuya=$this->input->post('txt_status');
-        // die(var_dump($list));
         $data = array();
+        $no = $_POST['start'];
         foreach ($list as $listdata) {
+            $no++;
             $row = array();
-            $row[] = $listdata->invoice;
-            $row[] = $listdata->USER_NAME;
+            $row[] = $no;
+            $row[] = $listdata->nojual;
             $row[] = $listdata->namacus;
-            $row[] = $listdata->ppn;
-            $row[] = $listdata->g_total;
-            $row[] = $listdata->metode;
-            $row[] = $listdata->tgl;
-            $row[] = '<a class="btn btn-pill btn-outline-primary btn-air-primary btn-xs" href="javascript:void(0)" title="Detail Beli" onclick="detail(' . "'" . $listdata->id_penjualan . "'" . ')"><i class="fa fa-search"></i> </a>';
+            $row[] = $listdata->jenis;
+            $row[] = $listdata->tanggal;
+            $row[] = $listdata->jam;
+            $row[] = $listdata->subtotal;
+            $row[] = '<a class="btn btn-pill btn-outline-warning btn-air-warning btn-xs" href="javascript:void(0)" title="Detail Beli" onclick="detail(' . "'" . $listdata->nojual . "'" . ')"><i class="fa fa-toggle-down"></i> </a>';
             $data[] = $row;
         }
         $output = array(
@@ -99,29 +112,64 @@ class C_penjualan extends CI_Controller
             $params['start'] = $start;
         }
         $list = $this->M_detailpenjualan->get_datatables($params);
+
         $data = array();
         $no = $_POST['start'];
         foreach ($list as $listdata) {
             $no++;
             $row = array();
             $row[] = $no;
-            $row[] = $listdata->kode_detail;
-            $row[] = $listdata->barcode;
+            $row[] = $listdata->iddjual;
             $row[] = $listdata->namabrg;
-            $row[] = $listdata->hbeli1;
             $row[] = $listdata->hjual1;
-            $row[] = $listdata->qty;
-            $row[] = $listdata->total;
+            $row[] = $listdata->qtyjual;
+            $row[] = $listdata->brutto;
             $data[] = $row;
         }
         $output = array(
             "draw" => $_POST['draw'],
-            "recordsTotal" => $this->M_detailpenjualan->count_all(),
+            "recordsTotal" => $this->M_detailpenjualan->count_all($params),
             "recordsFiltered" => $this->M_detailpenjualan->count_filtered($params),
             "data" => $data,
         );
+        // die(var_dump($output));
         echo json_encode($output);
-        // exit;
+    }
+    public function ajax_list_Epenjualan()
+    {
+        $start  = $_REQUEST['start']; //tambahan limit
+        $length = $_REQUEST['length'];
+        $params = array();
+        if ($this->input->post('txt_transID')) {
+            $params['txt_transID'] = $this->input->post('txt_transID');
+        }
+        if ($length != -1) {
+            $params['limit'] = $length; //tambahan limit
+            $params['start'] = $start;
+        }
+        $list = $this->M_penjualan->get_datatables($params);
+
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($list as $listdata) {
+            $no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = $listdata->iddjual;
+            $row[] = $listdata->namabrg;
+            $row[] = $listdata->hjual1;
+            $row[] = $listdata->qtyjual;
+            $row[] = $listdata->brutto;
+            $data[] = $row;
+        }
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->M_penjualan->count_all($params),
+            "recordsFiltered" => $this->M_penjualan->count_filtered($params),
+            "data" => $data,
+        );
+        // die(var_dump($output));
+        echo json_encode($output);
     }
 
 
@@ -160,9 +208,9 @@ class C_penjualan extends CI_Controller
         );
         echo json_encode($output);
     }
-    public function ajax_detail($id_penjualan)
+    public function ajax_detail($iddjual)
     {
-        $data = $this->M_detailpenjualan->get_by_id($id_penjualan);
+        $data = $this->M_detailpenjualan->get_by_id($iddjual);
         echo json_encode($data);
     }
     public function simpan_penjualan()
@@ -174,6 +222,7 @@ class C_penjualan extends CI_Controller
         $this->form_validation->set_rules('metode', 'Input metode', 'required');
         $this->form_validation->set_rules('bayar', 'Input Bayar', 'required');
         $this->form_validation->set_rules('kembalian', 'Input kembalian');
+        $this->form_validation->set_rules('namacust', 'Input Customer');
 
 
         if ($this->form_validation->run() == false) {
@@ -181,39 +230,99 @@ class C_penjualan extends CI_Controller
             $out['error_message']  = validation_errors();
         } else {
 
-            $this->db->select("RIGHT (inv.penjualan.kode_jual, 7) as kode_jual", false);
-            $this->db->order_by("kode_jual", "DESC");
+            $this->db->select("RIGHT (inv.hjual.nojual, 7) as nojual", false);
+            $this->db->order_by("nojual", "DESC");
             $this->db->limit(1);
-            $query = $this->db->get('penjualan');
+            $query = $this->db->get('hjual');
             if ($query->num_rows() <> 0) {
                 $data = $query->row();
-                $kode = intval($data->kode_jual) + 1;
+                $kode = intval($data->nojual) + 1;
             } else {
                 $kode = 1;
             }
             date_default_timezone_set('Asia/Jakarta');
-            $kodeinvoice = "POS" . date('YmdHis');
+            // $kodeinvoice = "POS" . date('YmdHis');
             $kode_jual = str_pad($kode, 7, "0", STR_PAD_LEFT);
             $total = $this->input->post('total');
             $bayar = $this->input->post('bayar');
             $kembalian = $bayar - $total;
             $save_data = array(
-                'kode_jual' => 'KJ-' . $kode_jual,
-                'id_user' => $this->session->userdata('ID'),
-                'invoice' => $kodeinvoice,
-                'id_karyawan' => $post_data['namacus'],
-                'g_total' => $post_data['total'],
-                'metode' => $post_data['metode'],
+                // 'id_user' => $this->session->userdata('ID'),
+                // 'invoice' => $kodeinvoice,
+                'kodecus' => $post_data['namacust'],
+                'subtotal' => $post_data['total'],
+                'jenis' => $post_data['payments'],
                 'bayar' => $post_data['bayar'],
-                'kembalian' => $kembalian,
-                'tgl' => date('Y-m-d H:i:s'),
+                'idcabang' => $post_data['cabangs'],
+                'sisabayar' => $kembalian,
+                'tanggal' => date('Y-m-d'),
+                'jam' => date('H:i:s'),
             );
             $this->M_penjualan->save_penjualan($save_data);
 
-            $idjual = "select max(id_penjualan) as id_penjualan from penjualan";
+            $idjual = "select max(nojual) as nojual from hjual";
             $id = implode($this->db->query($idjual)->row_array());
-            $sql = "update detail_penjualan set id_jual = '$id' where id_jual='0'";
+            $sql = "update djual set nojual = '$id' where nojual='0'";
             $this->db->query($sql);
+
+            $idcabang = "select max(idcabang) as idcabang from hjual";
+            $idss = implode($this->db->query($idcabang)->row_array());
+            $sqlss = "update djual set idcabang = '$idss' where idcabang='0'";
+            $this->db->query($sqlss);
+
+            $idcus = "select max(kodecus) as kodecus from hjual";
+            $ids = implode($this->db->query($idcus)->row_array());
+            $sqls = "update djual set kodecus = '$ids' where kodecus='0'";
+            $this->db->query($sqls);
+
+            if ($this->db->trans_status() == FALSE) {
+                $this->db->trans_rollback();
+                $out['is_error']       = False;
+                $out['error_message']  = "database error";
+            } else {
+                $this->db->trans_commit();
+                $out['is_error']       = false;
+                $out['succes_message']  = "Good luck Bro, Input data berhasil";
+            }
+        }
+        //Save Master Barang Logs
+
+        echo json_encode($out);
+    }
+    public function input_proses()
+    {
+        $post_data  = $this->input->post();
+        $this->form_validation->set_rules('layanan', 'Input Layanan', 'required');
+        $this->form_validation->set_rules('kodebrg', 'Input Kode');
+        $this->form_validation->set_rules('hjual', 'Input hargajual', 'required');
+        $this->form_validation->set_rules('jumlah', 'Input jumlah', 'required');
+        $this->form_validation->set_rules('stokbaru', 'Input Stokbaru', 'required');
+
+
+        if ($this->form_validation->run() == false) {
+            $out['is_error']       = true;
+            $out['error_message']  = validation_errors();
+        } else {
+            $microtime = substr((string)microtime(), 1, 8);
+            $date = trim($microtime, ".");
+            $qty = $this->input->post('jumlah');
+            $hjual = $this->input->post('hjual');
+            $total = $qty * $hjual;
+            $save_data = array(
+                'unit' => $post_data['layanan'],
+                'kodebrg' => $post_data['kodebrg'],
+                'hjual1' => $post_data['hjual'],
+                'qtyjual' => $post_data['jumlah'],
+                'brutto' => $total,
+                'tanggal' => date('Y-m-d'),
+            );
+
+            $this->M_penjualan->save($save_data);
+            $save_stok = array(
+                'stokawal' => $post_data['stokbaru'],
+            );
+            $this->M_masterbarang->update_stok(array('kodebrg' => $this->input->post('kodebrg')), $save_stok);
+
             if ($this->db->trans_status() == FALSE) {
                 $this->db->trans_rollback();
                 $out['is_error']       = False;

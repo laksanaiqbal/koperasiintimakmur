@@ -13,14 +13,33 @@
                         <div class="card-body">
                             <form method="POST" id="inputFrm" class="theme-form" enctype="multipart/form-data">
                                 <div class="mb-2 row">
-                                    <button id="btn_sup" type="button" class="btn btn-primary"><i class="fa fa-search"> Suplier</i></button>
+                                    <label class="col-md-3 col-form-label" for="cabang">Cabang</label>
+                                    <div class="col-md-6">
+                                        <select name="cabang" id="cabang" class="form-control select2">
+                                            <?php foreach ($datacabang as $data) : ?>
+                                                <option value="<?php echo $data->idcabang ?>"><?php echo $data->namacabang ?></option>
+                                            <?php endforeach ?>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="mb-2 row">
-                                    <div class="col-sm-6">
+                                    <label class="col-md-3 col-form-label" for="payment">Payment</label>
+                                    <div class="col-md-6">
+                                        <select name="payment" id="payment" class="form-control select2">
+                                            <option value="0">Cash</option>
+                                            <option value="1">Hutang</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-2 row">
+                                    <label class="col-md-3 col-form-label" for="namasup">Suplier</label>
+                                    <div class="col-md-6">
                                         <input class="form-control" id="namasup" name="namasup" type="text" placeholder="Type Namasup Here" readonly required>
                                     </div>
-
-                                    <div class="col-sm-6">
+                                    <div class="col-md-2">
+                                        <button id="btn_sup" type="button" class="btn btn-primary"><i class="fa fa-search"> Suplier</i></button>
+                                    </div>
+                                    <div class="col-sm-6" hidden>
                                         <input class="form-control" id="kodesup" name="kodesup" type="text" placeholder="Type kodesup Here" readonly required>
                                     </div>
                                 </div>
@@ -67,6 +86,34 @@
                                     </div>
                                 </div>
                             </form>
+                            <div class="table-responsive">
+                                <table class="display" id="datatable_list">
+                                    <div id="button"></div>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>ID</th>
+                                            <th>Nama Barang</th>
+                                            <th>harga_beli</th>
+                                            <th>harga_jual</th>
+                                            <th>qty</th>
+                                            <th>total</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <br>
+                            <div class="mb-2 row" style="text-align: right;">
+                                <h2>TOTAL</h2>
+                                <hr>
+                                <div id="sums">
+                                    <h1><?php echo $sum; ?></h1>
+                                    <input hidden value="<?php echo $sum; ?>" class="form-control" id="totals" name="totals" type="number" placeholder="Type Jumlah Here">
+                                </div>
+                            </div>
+                            <div class="mb-2 row">
+                                <button type="button" id="btn_CO" class="btn btn-primary"><i class="fa fa-paper-plane-o m-right-xs"></i> Simpan</button>
+                            </div>
                         </div>
                     </div>
                 </div>

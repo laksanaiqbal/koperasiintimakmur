@@ -19,33 +19,92 @@
                 <div class="mb-3 row">
                     <div class="col-sm-5">
                         <button id="btn_input" class="btn btn-pill btn-outline-info btn-air-info" type="button" title="btn btn-pill btn-outline-info btn-air-info"><i class="fa fa-plus-square">
-                                Input Barang </i></button>
+                                Input Penjualan </i></button>
                     </div>
                 </div>
+                <form class="theme-form" id="frm_index">
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label" for="txt_tgl_start">From</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="txt_tgl_start" name="txt_tgl_start" type="date">
+                        </div>
+                        <label class="col-sm-1 col-form-label" for="txt_tgl_end">To</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="txt_tgl_end" name="txt_tgl_end" type="date">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label" for="nojual">No. Jual</label>
+                        <div class="col-sm-9">
+                            <?php
+                            $this->db->select("nojual");
+                            $this->db->from('hjual a');
+                            $this->db->order_by('nojual', 'ASC');
+                            $penjualan = $this->db->get(); ?>
+                            <select id="nojual" name="nojual">
+                                <option value="">Silahkan Pilih</option>
+                                <?php
+                                foreach ($penjualan->result() as $rowpenjualan) {
+                                    echo "<option value='$rowpenjualan->nojual'>$rowpenjualan->nojual</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label" for="kodecus">Cust</label>
+                        <div class="col-sm-9">
+                            <?php
+                            $this->db->select("a.kodecus, b.namacus");
+                            $this->db->from('hjual a');
+                            $this->db->join('customer b', 'a.kodecus=b.kodecus');
+                            $this->db->order_by('nojual', 'ASC');
+                            $cus = $this->db->get(); ?>
+                            <select id="kodecus" name="kodecus">
+                                <option value="">Silahkan Pilih</option>
+                                <?php
+                                foreach ($cus->result() as $rowcus) {
+                                    echo "<option value='$rowcus->kodecus'>$rowcus->namacus</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="col-sm-7">
+                        </div>
+                        <div class="col-sm-5">
+                            <button id="btn_reset" class="btn btn-pill btn-outline-info btn-air-info" type="button" title="btn btn-pill btn-outline-info btn-air-info"><i class="fa fa-refresh"> Reload
+                                    Record</i></button>
+                            <button id="btn_cari" class="btn btn-pill btn-outline-info btn-air-info" type="button" title="btn btn-pill btn-outline-info btn-air-info"><i class="fa fa-send-o"> Find
+                                    Record</i></button>
+                        </div>
+                    </div>
+                </form>
                 <div class="table-responsive">
                     <table class="display" id="datatable_list">
                         <div id="button"></div>
                         <thead>
                             <tr>
-                                <th>Invoice</th>
-                                <th>Kasir</th>
+                                <th>No</th>
+                                <th>nojual</th>
                                 <th>Customer</th>
-                                <th>ppn</th>
-                                <th>Total</th>
                                 <th>Payment Methode</th>
-                                <th>tgl</th>
+                                <th>Tanggal</th>
+                                <th>Jam</th>
+                                <th>Total</th>
                                 <th>action</th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>Invoice</th>
-                                <th>Kasir</th>
+                                <th>No</th>
+                                <th>nojual</th>
                                 <th>Customer</th>
-                                <th>ppn</th>
-                                <th>Total</th>
                                 <th>Payment Methode</th>
-                                <th>tgl</th>
+                                <th>Tanggal</th>
+                                <th>Jam</th>
+                                <th>Total</th>
                                 <th>action</th>
                             </tr>
                         </tfoot>
@@ -55,13 +114,26 @@
         </div>
     </div>
 </div>
-<?php $this->load->view('penjualan/payment') ?>
 <?php $this->load->view('penjualan/detail') ?>
 <?php $this->load->view('penjualan/input') ?>
-
+<?php $this->load->view('penjualan/payment') ?>
 <?php $this->load->view('penjualan/showbarang') ?>
 <script type="text/javascript">
     $('.modal').css('overflow-y', 'auto');
+    $(document).ready(function(e) {
+
+        $("#nojual").select2({
+            dropdownParent: $("#frm_index")
+        });
+        $("#kodecus").select2({
+            dropdownParent: $("#frm_index")
+        });
+    })
+    $(document).ready(function(e) {
+        setInterval(function() {
+            $("#sums").load(window.location.href + " #sums");
+        }, 2500);
+    })
     var table_penjualan;
     $(document).ready(function(e) {
         table_penjualan = $('#datatable_list').DataTable({
@@ -70,8 +142,8 @@
             //     [10, 25, 50, "All"]
             // ],
             "lengthMenu": [
-                [50, 75, 100, -1],
-                [50, 75, 100, "All"]
+                [5, 50, 75, 100, -1],
+                [5, 50, 75, 100, "All"]
             ],
             // "pagingType": "full_numbers",
             "oLanguage": {
@@ -90,7 +162,10 @@
                 "type": "POST",
                 "data": function(data) {
                     $('#loader').hide();
-                    data.txt_nmkary = $('#txt_nmkary').select2().val();
+                    data.nojual = $('#nojual').val();
+                    data.txt_tgl_start = $('#txt_tgl_start').val();
+                    data.txt_tgl_end = $('#txt_tgl_end').val();
+                    data.kodecus = $('#kodecus').val();
                 }
             },
             //Set column definition initialisation properties.
@@ -109,20 +184,34 @@
         var buttons = new $.fn.dataTable.Buttons(table_penjualan, {}).container().appendTo($('#button'));
 
     })
+    $('#btn_reset').click(function() { //button reset event click
+        $('[name="nojual"]').select2().val('').trigger('change');
+        $('[name="txt_tgl_start"]').val('');
+        $('[name="txt_tgl_end"]').val('');
+        $('[name="kodecus"]').select2().val('').trigger('change');
 
-    function detail(id_penjualan) {
+        table_penjualan.ajax.reload(); //just reload table
+        //just reload table1
+        scrollWin();
+    });
+    $('#btn_cari').click(function() { //button filter event click
+        table_penjualan.ajax.reload(); //just reload table
+        scrollWin();
+    });
+
+    function detail(nojual) {
         // $('#frmModal')[0].reset(); // reset form on modals
         $('.form-group').removeClass('has-error'); // clear error class
         $('.help-block').empty(); // clear error string
         //Ajax Load data from ajax
         $.ajax({
-            url: "<?php echo site_url('c_penjualan/ajax_detail') ?>/" + id_penjualan,
+            url: "<?php echo site_url('C_penjualan/ajax_detail') ?>/" + nojual,
             type: "GET",
             dataType: "JSON",
             success: function(data) {
-                $('[name="id_jual"]').val(data.id_jual);
-                $('[name="idtemp"]').val(data.id_jual);
-                $('.modal-title').text('  Detailjual'); // Set Title to Bootstrap modal title
+                $('[name="id_jual"]').val(data.nojual);
+                $('[name="idtemp"]').val(data.nojual);
+                $('.modal-title').text('  Detail Penjualan'); // Set Title to Bootstrap modal title
                 $('#show_detail').modal('show'); // show bootstrap modal when complete loaded
                 table_detail.ajax.reload(null);
 
@@ -134,6 +223,6 @@
     }
     $('#btn_input').click(function() { //button filter event click
         $('#forminput').modal('show'); // show bootstrap modal when complete loaded
-        $('.modal-title').text('  Input Pembelian'); // Set Title to Bootstrap modal title
+        $('.modal-title').text('  Input Penjualan'); // Set Title to Bootstrap modal title
     });
 </script>

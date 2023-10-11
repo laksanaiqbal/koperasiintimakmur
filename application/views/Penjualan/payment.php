@@ -15,17 +15,6 @@
                                 <div class="hitung">
                                     <form method="POST" id="simpanjual" class="theme-form" enctype="multipart/form-data">
                                         <div class="mb-2 row">
-                                            <label class="col-sm-3 col-form-label" for="namacus">Cust</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control" name="namacus" id="namacus">
-                                                    <option value="1">UMUM</option>
-                                                    <?php foreach ($datacus as $data) : ?>
-                                                        <option value="<?php echo $data->kodecus ?>"><?php echo $data->namacus ?></option>
-                                                    <?php endforeach ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="mb-2 row">
                                             <label class="col-sm-3 col-form-label" for="total">Total</label>
                                             <div class="col-sm-9">
                                                 <input value="<?php echo $sum; ?>" class="form-control" id="total" name="total" type="number" placeholder="Type Jumlah Here" readonly>
@@ -41,8 +30,8 @@
                                             <label class="col-sm-3 col-form-label" for="metode">Payment</label>
                                             <div class="col-sm-9">
                                                 <div class="checkbox">
-                                                    <input type="radio" name="metode" id="layanan" value="Cash" checked> Cash
-                                                    <input type="radio" name="metode" id="layanan" value="Kredit"> Kredit
+                                                    <input type="radio" name="metode" id="layanan" value="0" checked> Cash
+                                                    <input type="radio" name="metode" id="layanan" value="1"> Hutang
                                                 </div>
                                             </div>
                                         </div>
@@ -58,9 +47,16 @@
                                                 <input class="form-control" id="kembalian" name="kembalian" type="number" placeholder="Type Jumlah Here" readonly>
                                             </div>
                                         </div>
+                                        <div class="mb-2 row" hidden>
+                                            <div class="col-sm-9">
+                                                <input class="form-control" id="cabangs" name="cabangs" type="number" placeholder="Type Jumlah Here" readonly>
+                                                <input class="form-control" id="payments" name="payments" type="number" placeholder="Type Jumlah Here" readonly>
+                                                <input class="form-control" id="namacust" name="namacust" type="number" placeholder="Type Jumlah Here" readonly>
+                                            </div>
+                                        </div>
                                         <div class="modal-footer">
                                             <button type="submit" id="btnSave" class="btn btn-pill btn-outline-primary-2x btn-air-primary">
-                                                <i class="fa fa-send-o">Pay!</i>
+                                                <i class="fa fa-send-o"> Pay!</i>
                                             </button>
                                         </div>
                                     </form>
@@ -88,15 +84,8 @@
         var cus1 = parseInt($("#namacus").val())
         $("#cust").attr("value", cus1)
     })
-    $(document).ready(function() {
-        $('#kodecus').select2();
-        $('[name="namacus"]').select2();
-    });
-    $(document).ready(function() {
-        $("#namacus").select2({
-            dropdownParent: $("#show_pay")
-        });
-    });
+
+
     $('#simpanjual').submit(function(e) {
         urls = "<?php echo site_url('C_penjualan/simpan_penjualan') ?>";
         var data = new FormData($('#simpanjual')[0]);
@@ -130,7 +119,8 @@
                     table_penjualan.ajax.reload(null, false);
                     table_input.ajax.reload(null, false);
                     document.getElementById("simpanjual").reset();
-                    $('#simpanjual').modal('hide');
+                    $('#show_pay').modal('hide');
+                    $('#forminput').modal('hide');
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {

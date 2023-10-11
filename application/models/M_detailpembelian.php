@@ -4,10 +4,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class M_detailpembelian extends CI_Model
 {
 
-    var $table = 'inv.detail_pembelian';
-    var $column_order = array(null, 'a.id_detail', 'a.id_beli', 'a.id_barang', 'a.kode_detail', 'a.harga_beli', 'a.harga_jual', 'a.qty', 'a.total', 'a.id_sup', 'a.status'); //set column field database for datatable orderable
-    var $column_search = array('a.id_detail', 'a.id_beli', 'a.id_barang', 'a.kode_detail', 'a.harga_beli', 'a.harga_jual', 'a.qty', 'a.total', 'a.id_sup', 'a.status'); //set column field database for datatable searchable 
-    var $order = array('a.id_beli' => 'desc'); // default order 
+    var $table = 'inv.dbeli';
+    var $column_order = array(null, 'a.iddbeli', 'a.nobeli', 'a.kodebrg', 'a.hpp', 'a.hjual1', 'a.qtybeli', 'a.brutto', 'a.kodesup', 'a.post'); //set column field database for datatable orderable
+    var $column_search = array('a.iddbeli', 'a.nobeli', 'a.kodebrg', 'a.hpp', 'a.hjual1', 'a.qtybeli', 'a.brutto', 'a.kodesup', 'a.post'); //set column field database for datatable searchable 
+    var $order = array('a.nobeli' => 'desc'); // default order 
 
     public function __construct()
     {
@@ -26,9 +26,9 @@ class M_detailpembelian extends CI_Model
     }
     private function _get_datatables_query()
     {
-        $this->db->select("b.kodebrg,b.namabrg, b.kodesat,c.namasat, a.id_detail, a.id_beli, a.id_barang, a.kode_detail, a.harga_beli, a.harga_jual, a.qty, a.total, a.id_sup, a.status");
-        $this->db->from('inv.detail_pembelian a');
-        $this->db->join('inv.barang b', 'a.id_barang=b.kodebrg');
+        $this->db->select("b.kodebrg,b.namabrg, b.kodesat,c.namasat, a.iddbeli, a.nobeli, a.kodebrg, a.hpp, a.hjual1, a.qtybeli, a.brutto, a.kodesup, a.post");
+        $this->db->from('inv.dbeli a');
+        $this->db->join('inv.barang b', 'a.kodebrg=b.kodebrg');
         $this->db->join('inv.satuan c', 'b.kodesat=c.kodesat');
         $i = 0;
 
@@ -62,7 +62,7 @@ class M_detailpembelian extends CI_Model
     {
         $this->_get_datatables_query();
         if (isset($params['txt_transID'])) {
-            $this->db->where('a.id_beli', $params['txt_transID']);
+            $this->db->where('a.nobeli', $params['txt_transID']);
         }
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
@@ -73,7 +73,7 @@ class M_detailpembelian extends CI_Model
     {
         $this->_get_datatables_query();
         if (isset($params['txt_transID'])) {
-            $this->db->where('a.id_beli', $params['txt_transID']);
+            $this->db->where('a.nobeli', $params['txt_transID']);
         }
 
         $query = $this->db->get();
@@ -83,19 +83,18 @@ class M_detailpembelian extends CI_Model
     {
         $this->_get_datatables_query();
         if (isset($params['txt_transID'])) {
-            $this->db->where('a.id_beli', $params['txt_transID']);
+            $this->db->where('a.nobeli', $params['txt_transID']);
         }
         return $this->db->count_all_results();
     }
     public function get_by_id($id)
     {
-        $this->db->select("a.id_beli,b.kodebrg,b.namabrg, b.kodesat,c.namasat, a.id_detail,  a.id_barang, a.kode_detail, a.harga_beli, a.harga_jual, a.qty, a.total, a.id_sup");
-        $this->db->from('inv.detail_pembelian a');
-        $this->db->join('inv.barang b', 'a.id_barang=b.kodebrg');
+        $this->db->select("a.nobeli,b.kodebrg,b.namabrg, b.kodesat,c.namasat, a.iddbeli,  a.kodebrg, a.hpp, a.hjual1, a.qtybeli, a.brutto, a.kodesup");
+        $this->db->from('inv.dbeli a');
+        $this->db->join('inv.barang b', 'a.kodebrg=b.kodebrg');
         $this->db->join('inv.satuan c', 'b.kodesat=c.kodesat');
-        $this->db->WHERE('a.id_beli', $id);
+        $this->db->WHERE('a.nobeli', $id);
         $query = $this->db->get();
-        // die(var_dump($query));
         return $query->row();
     }
 }

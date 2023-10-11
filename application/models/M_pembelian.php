@@ -4,10 +4,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class M_pembelian extends CI_Model
 {
 
-    var $table = 'detail_pembelian';
-    var $column_order = array(null, 'a.id_detail', 'a.id_beli', 'a.id_barang', 'a.kode_detail', 'a.harga_beli', 'a.harga_jual', 'a.qty', 'a.total', 'a.id_sup'); //set column field database for datatable orderable
-    var $column_search = array('a.id_detail', 'a.id_beli', 'a.id_barang', 'a.kode_detail', 'a.harga_beli', 'a.harga_jual', 'a.qty', 'a.total', 'a.id_sup'); //set column field database for datatable searchable 
-    var $order = array('a.id_detail' => 'asc'); // default order 
+    var $table = 'inv.dbeli';
+    var $column_order = array(null, 'a.iddbeli', 'a.nobeli', 'a.kodebrg', 'a.hpp', 'a.hjual1', 'a.qtybeli', 'a.brutto', 'a.kodesup', 'a.post'); //set column field database for datatable orderable
+    var $column_search = array('a.iddbeli', 'a.nobeli', 'a.kodebrg', 'a.hpp', 'a.hjual1', 'a.qtybeli', 'a.brutto', 'a.kodesup', 'a.post'); //set column field database for datatable searchable 
+    var $order = array('a.nobeli' => 'desc'); // default order 
 
     public function __construct()
     {
@@ -16,18 +16,18 @@ class M_pembelian extends CI_Model
     }
     public function getdata()
     {
-        $query = $this->db->query("SELECT * FROM detail_pembelian ORDER BY id_detail ASC");
+        $query = $this->db->query("SELECT * FROM dbeli ORDER BY nobeli ASC");
         return $query->result();
     }
     private function _get_datatables_query()
     {
         $month = date('m') - 3;
         $years = date('Y');
-        $this->db->select("a.id_detail,b.barcode, c.namasup, a.id_beli,b.namabrg,b.kodebrg, a.id_barang, a.kode_detail, a.harga_beli, a.harga_jual, a.qty,a.total, a.id_sup");
-        $this->db->from('detail_pembelian a');
-        $this->db->where("a.id_beli='0'");
-        $this->db->join('barang b', 'a.id_barang=b.kodebrg');
-        $this->db->join('suplier c', 'a.id_sup=c.kodesup');
+        $this->db->select("a.iddbeli,b.barcode, a.nobeli,b.namabrg,b.kodebrg, a.kodebrg, a.hpp, a.hjual1, a.qtybeli ,a.brutto, a.kodesup");
+        $this->db->from('dbeli a');
+        $this->db->where("a.nobeli='0'");
+        $this->db->join('barang b', 'a.kodebrg=b.kodebrg');
+        // $this->db->join('suplier c', 'a.id_sup=c.kodesup');
         // $this->db->where('year(a.tanggal)', $years);
         $i = 0;
 
@@ -65,7 +65,7 @@ class M_pembelian extends CI_Model
 
         //jika parameter yang di set txt_nmkary 
         if (isset($params['txt_nmkary'])) {
-            $this->db->where('a.id_detail', $params['txt_nmkary']);
+            $this->db->where('a.nobeli', $params['txt_nmkary']);
         }
 
         if ($_POST['length'] != -1)
@@ -83,7 +83,7 @@ class M_pembelian extends CI_Model
         $years = date('Y');
         //jika parameter yang di set txt_nmkary 
         if (isset($params['txt_nmkary'])) {
-            $this->db->where('a.id_detail', $params['txt_nmkary']);
+            $this->db->where('a.nobeli', $params['txt_nmkary']);
         }
 
         $query = $this->db->get();
@@ -98,14 +98,16 @@ class M_pembelian extends CI_Model
         $years = date('Y');
         //jika parameter yang di set txt_nmkary 
         if (isset($params['txt_nmkary'])) {
-            $this->db->where('a.id_detail', $params['txt_nmkary']);
+            $this->db->where('a.nobeli', $params['txt_nmkary']);
         }
         return $this->db->count_all_results();
     }
-    public function get_by_id($id_detail)
+    public function get_by_id($iddbeli)
     {
-        $this->db->from($this->table);
-        $this->db->where('id_detail', $id_detail);
+        $this->db->select("a.nobeli,b.kodebrg,b.namabrg, b.kodesat, a.iddbeli,  a.kodebrg, a.hpp, a.hjual1, a.qtybeli, a.brutto, a.kodesup");
+        $this->db->from('inv.dbeli a');
+        $this->db->join('inv.barang b', 'a.kodebrg=b.kodebrg');
+        $this->db->where('iddbeli', $iddbeli);
         $query = $this->db->get();
 
         return $query->row();
@@ -114,10 +116,7 @@ class M_pembelian extends CI_Model
     {
         $this->db->insert($this->table, $data);
     }
-    public function save_pembelian($data)
-    {
-        $this->db->insert('inv.pembelian', $data);
-    }
+
 
     public function save_log($data)
     {
@@ -131,10 +130,9 @@ class M_pembelian extends CI_Model
     }
     public function delete_by_id($id)
     {
-        $this->db->where('id_detail', $id);
+        $this->db->where('iddbeli', $id);
         $this->db->delete($this->table);
     }
-
 
     public function delete_by_id_POlogs($id)
     {
@@ -143,13 +141,13 @@ class M_pembelian extends CI_Model
     }
     public function get_PO($id)
     {
-        $PO = $this->db->query("SELECT * FROM inv.detail_pembelian WHERE id_detail='$id'");
+        $PO = $this->db->query("SELECT * FROM inv.dbeli WHERE nobeli='$id'");
         return $PO->row();
     }
     public function get_sum()
     {
-        $PO = "SELECT sum(total) as total FROM inv.detail_pembelian WHERE id_beli='0'";
+        $PO = "SELECT sum(brutto) as brutto FROM inv.dbeli WHERE nobeli='0'";
         $result = $this->db->query($PO);
-        return $result->row()->total;
+        return $result->row()->brutto;
     }
 }

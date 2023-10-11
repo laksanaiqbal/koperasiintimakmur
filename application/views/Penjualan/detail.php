@@ -11,7 +11,7 @@
                 <div class="col-sm-12">
                     <div class="card-body">
                         <form method="POST" id="frm_logger" class="theme-form">
-                            <input type="hidden" name="idtemp" id="idtemp">
+                            <input hidden name="idtemp" id="idtemp">
                             <div class="mb-12 row">
                                 <label class="col-sm-2 col-form-label" for="id_jual">ID</label>
                                 <div class="col-sm-2">
@@ -26,8 +26,8 @@
                                 <div id="buttondetail"></div>
                                 <thead>
                                     <tr>
-                                        <th>Kode</th>
-                                        <th>Barcode</th>
+                                        <th>No</th>
+                                        <th>ID Jual</th>
                                         <th>Nama Produk</th>
                                         <th>Harga Jual</th>
                                         <th>qty</th>

@@ -4,10 +4,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class M_Dpenjualan extends CI_Model
 {
 
-    var $table = 'penjualan';
-    var $column_order = array(null, 'a.id_penjualan', 'a.id_user', 'a.id_karyawan', 'a.kode_jual', 'a.invoice', 'a.metode', 'a.bayar', 'a.kembalian', 'a.g_total', 'a.ppn', 'a.tgl', 'a.status'); //set column field database for datatable orderable
-    var $column_search = array('a.id_penjualan', 'a.id_user', 'a.id_karyawan', 'a.kode_jual', 'a.invoice', 'a.metode', 'a.bayar', 'a.kembalian', 'a.g_total', 'a.ppn', 'a.tgl', 'a.status'); //set column field database for datatable searchable 
-    var $order = array('a.id_penjualan' => 'asc'); // default order 
+    var $table = 'inv.hjual';
+    var $column_order = array(null, 'a.nojual', 'a.kodecus', 'a.idcabang', 'a.tanggal', 'a.jam',  'a.jenis', 'a.bayar', 'a.sisabayar', 'a.subtotal', 'a.ppn', 'a.post', 'a.discFak'); //set column field database for datatable orderable
+    var $column_search = array('a.nojual', 'a.kodecus', 'a.idcabang', 'a.tanggal', 'a.jam',  'a.jenis', 'a.bayar', 'a.sisabayar', 'a.subtotal', 'a.ppn', 'a.post', 'a.discFak'); //set column field database for datatable searchable 
+    var $order = array('a.nojual' => 'desc'); // default order 
 
     public function __construct()
     {
@@ -16,17 +16,16 @@ class M_Dpenjualan extends CI_Model
     }
     public function getdata()
     {
-        $query = $this->db->query("SELECT * FROM penjualan ORDER BY id_penjualan ASC");
+        $query = $this->db->query("SELECT * FROM hjual ORDER BY nojual ASC");
         return $query->result();
     }
     private function _get_datatables_query()
     {
         $month = date('m') - 3;
         $years = date('Y');
-        $this->db->select("a.id_penjualan, a.id_user, b.USER_NAME, a.id_karyawan, c.kodecus,c.namacus, a.kode_jual, a.invoice, a.metode, a.bayar, a.kembalian, a.g_total, a.ppn, a.tgl, a.status");
-        $this->db->from('penjualan a');
-        $this->db->join('db_logins.tb_logins b', 'a.id_user=b.ID');
-        $this->db->join('customer c', 'a.id_karyawan=c.kodecus');
+        $this->db->select("a.nojual,a.idcabang, a.kodecus, c.kodecus,c.namacus, a.jenis, a.bayar, a.sisabayar, a.subtotal, a.ppn, a.tanggal,a.jam, a.post, a.discFak");
+        $this->db->from('hjual a');
+        $this->db->join('customer c', 'a.kodecus=c.kodecus');
 
 
         // $this->db->where('year(a.tanggal)', $years);
@@ -64,9 +63,50 @@ class M_Dpenjualan extends CI_Model
         $month = date('m');
         $years = date('Y');
 
-        //jika parameter yang di set txt_nmkary 
-        if (isset($params['txt_nmkary'])) {
-            $this->db->where('a.id_penjualan', $params['txt_nmkary']);
+        //kodecus 
+        if ((!isset($params['nojual'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (isset($params['kodecus']))) {
+            $this->db->where('a.kodecus', $params['kodecus']);
+        }
+        //nojual 
+        if ((isset($params['nojual'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (!isset($params['kodecus']))) {
+            $this->db->where('a.nojual', $params['nojual']);
+        }
+        //kodecus & nojual
+        if ((isset($params['nojual'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (isset($params['kodecus']))) {
+            $this->db->where('a.nojual', $params['nojual']);
+            $this->db->where('a.kodecus', $params['kodecus']);
+        }
+        // tgl start & Tgl End
+        if ((!isset($params['nojual'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodecus']))) {
+            $this->db->where('STR_TO_DATE(a.tanggal, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+            $this->db->where('STR_TO_DATE(a.tanggal, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
+        }
+        // tgl start 
+        if ((!isset($params['nojual'])) && (isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (!isset($params['kodecus']))) {
+            $this->db->where('STR_TO_DATE(a.tanggal, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+        }
+        //Tgl End
+        if ((!isset($params['nojual'])) && (!isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodecus']))) {
+            $this->db->where('STR_TO_DATE(a.tanggal, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
+        }
+        //nojual & tgl start & tgl end
+        if ((isset($params['nojual'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodecus']))) {
+            $this->db->where('a.nojual', $params['nojual']);
+            $this->db->where('STR_TO_DATE(a.tanggal, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+            $this->db->where('STR_TO_DATE(a.tanggal, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
+        }
+        //tgl start & tgl end & kodecus
+        if ((!isset($params['nojual'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (isset($params['kodecus']))) {
+            $this->db->where('a.kodecus', $params['kodecus']);
+            $this->db->where('STR_TO_DATE(a.tanggal, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+            $this->db->where('STR_TO_DATE(a.tanggal, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
+        }
+        //nojual & tgl start & tgl end & kodecus
+        if ((isset($params['nojual'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (isset($params['kodecus']))) {
+            $this->db->where('a.nojual', $params['nojual']);
+            $this->db->where('a.kodecus', $params['kodecus']);
+            $this->db->where('STR_TO_DATE(a.tanggal, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+            $this->db->where('STR_TO_DATE(a.tanggal, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
         }
 
         if ($_POST['length'] != -1)
@@ -82,7 +122,7 @@ class M_Dpenjualan extends CI_Model
         $years = date('Y');
         //jika parameter yang di set txt_nmkary 
         if (isset($params['txt_nmkary'])) {
-            $this->db->where('a.id_penjualan', $params['txt_nmkary']);
+            $this->db->where('a.nojual', $params['txt_nmkary']);
         }
 
         $query = $this->db->get();
@@ -97,7 +137,7 @@ class M_Dpenjualan extends CI_Model
         $years = date('Y');
         //jika parameter yang di set txt_nmkary 
         if (isset($params['txt_nmkary'])) {
-            $this->db->where('a.id_penjualan', $params['txt_nmkary']);
+            $this->db->where('a.nojual', $params['txt_nmkary']);
         }
         return $this->db->count_all_results();
     }
@@ -117,23 +157,23 @@ class M_Dpenjualan extends CI_Model
     }
     public function delete_by_id($id)
     {
-        $this->db->where('id_penjualan', $id);
+        $this->db->where('nojual', $id);
         $this->db->delete($this->table);
     }
-    public function get_detail($id_penjualan)
+    public function get_detail($nojual)
     {
-        $this->db->select("a.id_penjualan, a.id_user, a.kode_jual, a.invoice, a.metode, a.bayar, a.kembalian, a.g_total, a.ppn, a.tgl, a.status");
-        $this->db->from('penjualan a');
-        $this->db->join('detail_penjualan b', 'a.id_penjualan=b.id_penjualan');
-        $this->db->join('barang c', 'b.id_barang=c.kodebrg');
-        $this->db->where('a.id_penjualan=b.id_penjualan', $id_penjualan);
+        $this->db->select("a.nojual, a.jenis, a.bayar, a.sisabayar, a.subtotal, a.ppn, a.tanggal,a.jam, a.post");
+        $this->db->from('hjual a');
+        $this->db->join('djual b', 'a.nojual=b.nojual');
+        $this->db->join('barang c', 'b.kodebrg=c.kodebrg');
+        $this->db->where('a.nojual=b.nojual', $nojual);
         $query = $this->db->get();
         return $query->row();
     }
-    public function get_by_id($id_penjualan)
+    public function get_by_id($nojual)
     {
         $this->db->from($this->table);
-        $this->db->where('id_penjualan', $id_penjualan);
+        $this->db->where('nojual', $nojual);
         $query = $this->db->get();
 
         return $query->row();

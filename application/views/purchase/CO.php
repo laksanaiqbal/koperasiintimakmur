@@ -14,6 +14,17 @@
                             <div class="col-md-10" style="margin-left: auto; margin-right:auto;">
                                 <div class="hitung">
                                     <form method="POST" id="simpanBeli" class="theme-form" enctype="multipart/form-data">
+                                        <!-- <div class="mb-2 row">
+                                            <button id="btn_sup" type="button" class="btn btn-primary"><i class="fa fa-search"> Suplier</i></button>
+                                        </div> -->
+                                        <div class="mb-2 row" hidden>
+                                            <div class="col-sm-6">
+                                                <input value="" class="form-control" id="kodesuplier" name="kodesuplier" type="text" placeholder="Type KOdesuplier Here">
+                                                <input value="" class="form-control" id="cabangs" name="cabangs" type="text" placeholder="Type cabangs Here">
+                                                <input value="" class="form-control" id="payments" name="payments" type="text" placeholder="Type payments Here">
+
+                                            </div>
+                                        </div>
                                         <div class="mb-2 row">
                                             <label class="col-sm-3 col-form-label" for="tanggal">tanggal</label>
                                             <div class="col-sm-9">
@@ -21,16 +32,9 @@
                                             </div>
                                         </div>
                                         <div class="mb-2 row">
-                                            <label class="col-sm-3 col-form-label" for="faktur">No.Fak</label>
-                                            <div class="col-sm-9">
-                                                <input class="form-control" id="faktur" name="faktur" type="number" placeholder="Type Faktur Here" required>
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-2 row">
                                             <label class="col-sm-3 col-form-label" for="total">Total</label>
                                             <div class="col-sm-9 sum">
-                                                <input value="<?php echo $sum; ?>" class="form-control" id="total" name="total" type="number" placeholder="Type Jumlah Here">
+                                                <input class="form-control" id="total" name="total" type="number" placeholder="Type Jumlah Here">
                                             </div>
                                         </div>
                                         <div class="mb-2 row">
@@ -63,7 +67,7 @@
                                         <div class="modal-footer">
                                             <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
                                             <button type="submit" id="btnSave" class="btn btn-pill btn-outline-primary-2x btn-air-primary">
-                                                <i class="fa fa-send-o">Simpan</i>
+                                                <i class="fa fa-send-o"> Pay</i>
                                             </button>
                                         </div>
                                     </form>
