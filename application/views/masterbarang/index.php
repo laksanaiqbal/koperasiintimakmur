@@ -48,7 +48,7 @@
             </form>
             <div class="mb-3 row">
                 <div class="col-sm-5">
-                    <button id="btn_input" class="btn btn-pill btn-outline-info btn-air-info" type="button" title="btn btn-pill btn-outline-info btn-air-info"><i class="fa fa-plus-square">
+                    <button id="btn_input" class="btn btn-pill btn-outline-info btn-air-info" type="button" title="btn btn-pill btn-outline-info btn-air-info" data-bs-target="#staticBackdrop"><i class="fa fa-plus-square">
                             Input Barang </i></button>
                 </div>
             </div>
@@ -114,8 +114,8 @@
             "searching": true,
             "autoWidth": true,
             "info": true,
-            // "scrollY": 455,
-            "scrollX": true,
+            // "scrollY": true,
+            "scrollX": false,
             "order": [], //Initial no order.
             "ajax": {
                 "url": "<?php echo site_url('C_masterbarang/ajax_list') ?>",
@@ -221,38 +221,7 @@
         });
     }
 
-    function edit_data(kodebrg) {
-        $('.form-group').removeClass('has-error'); // clear error class
-        $('.help-block').empty(); // clear error string
-        // alert(kodebrg);
-        //Ajax Load data from ajax
-        $.ajax({
-            url: "<?php echo site_url('C_masterbarang/ajax_edit') ?>/" + kodebrg,
-            type: "GET",
-            dataType: "JSON",
-            success: function(data) {
-                $('[name="idupdate"]').val(data.kodebrg);
-                $('[name="kodebrg"]').val(data.kodebrg);
-                $('[name="barcode"]').val(data.barcode);
-                $('[name="kelompok"]').val(data.kodeklmpk);
-                $('[name="txt_input_dept"]').val(data.dept);
-                $('[name="satuan"]').val(data.kodesat);
-                $('[name="namabrg"]').val(data.namabrg);
-                $('[name="stokawal"]').val(data.stokawal);
-                $('[name="stokakhir"]').val(data.stokakhir);
-                $('[name="stokmin"]').val(data.stokmin);
-                $('[name="stokmax"]').val(data.stokmax);
-                $('[name="hpp"]').val(data.hpp);
-                $('[name="hjual"]').val(data.hjual1);
 
-                $('#frmEdit').modal('show'); // show bootstrap modal when complete loaded
-                $('.modal-title').text('Edit Data Barang'); // Set Title to Bootstrap modal title
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error get data from ajax');
-            }
-        });
-    }
 
     function delete_data(id) {
         var data_id = id;
@@ -294,31 +263,9 @@
             })
     }
 
-    function previewGambar() {
-        const image = document.querySelector('#gambar1');
-        const imgPreview = document.querySelector('.gambar-preview');
-        imgPreview.style.display = 'block';
 
-        const oFReader = new FileReader();
-        oFReader.readAsDataURL(image.files[0]);
 
-        oFReader.onload = function(oFREvent) {
-            imgPreview.src = oFREvent.target.result;
-        }
-    }
 
-    function previewImage() {
-        const image = document.querySelector('#image');
-        const imgPreview = document.querySelector('.img-preview');
-        imgPreview.style.display = 'block';
-
-        const oFReader = new FileReader();
-        oFReader.readAsDataURL(image.files[0]);
-
-        oFReader.onload = function(oFREvent) {
-            imgPreview.src = oFREvent.target.result;
-        }
-    }
 
     function disable_data(id) {
         var data_id = id;
@@ -355,9 +302,7 @@
                             swal("NOT Disabled!", "Something blew up.", "error");
                         }
                     });
-                    // swal("Poof! Your imaginary file has been disable!", {
-                    //     icon: "success",
-                    // });
+
                 } else {
                     swal("Your imaginary file is safe!");
                 }

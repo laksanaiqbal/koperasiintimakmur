@@ -5,8 +5,8 @@ class M_detailpembelian extends CI_Model
 {
 
     var $table = 'inv.dbeli';
-    var $column_order = array(null, 'a.iddbeli', 'a.nobeli', 'a.kodebrg', 'a.hpp', 'a.hjual1', 'a.qtybeli', 'a.brutto', 'a.kodesup', 'a.post'); //set column field database for datatable orderable
-    var $column_search = array('a.iddbeli', 'a.nobeli', 'a.kodebrg', 'a.hpp', 'a.hjual1', 'a.qtybeli', 'a.brutto', 'a.kodesup', 'a.post'); //set column field database for datatable searchable 
+    var $column_order = array(null, 'a.iddbeli', 'a.nobeli', 'a.kodebrg', 'a.hpp', 'a.hjual1', 'a.qtybeli', 'a.brutto', 'a.status', 'a.post'); //set column field database for datatable orderable
+    var $column_search = array('a.iddbeli', 'a.nobeli', 'a.kodebrg', 'a.hpp', 'a.hjual1', 'a.qtybeli', 'a.brutto', 'a.status', 'a.post'); //set column field database for datatable searchable 
     var $order = array('a.nobeli' => 'desc'); // default order 
 
     public function __construct()
@@ -15,18 +15,19 @@ class M_detailpembelian extends CI_Model
         $this->load->database();
     }
 
-    public function update($where, $save_data)
+    public function update($where, $save_edit_dbeli)
     {
-        $this->db->update($this->table, $save_data, $where);
+        $this->db->update($this->table, $save_edit_dbeli, $where);
         return $this->db->affected_rows();
     }
+
     public function save($data)
     {
         $this->db->insert($this->table, $data);
     }
     private function _get_datatables_query()
     {
-        $this->db->select("b.kodebrg,b.namabrg, b.kodesat,c.namasat, a.iddbeli, a.nobeli, a.kodebrg, a.hpp, a.hjual1, a.qtybeli, a.brutto, a.kodesup, a.post");
+        $this->db->select("b.kodebrg,b.namabrg,a.satbeli, b.kodesat,c.namasat, a.iddbeli, a.nobeli, a.kodebrg, a.hpp, a.hjual1, a.qtybeli, a.brutto, a.status, a.post, a.note");
         $this->db->from('inv.dbeli a');
         $this->db->join('inv.barang b', 'a.kodebrg=b.kodebrg');
         $this->db->join('inv.satuan c', 'b.kodesat=c.kodesat');
@@ -61,8 +62,8 @@ class M_detailpembelian extends CI_Model
     function get_datatables($params)
     {
         $this->_get_datatables_query();
-        if (isset($params['txt_transID'])) {
-            $this->db->where('a.nobeli', $params['txt_transID']);
+        if (isset($params['dbeli'])) {
+            $this->db->where('a.nobeli', $params['dbeli']);
         }
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
@@ -72,8 +73,8 @@ class M_detailpembelian extends CI_Model
     function count_filtered($params)
     {
         $this->_get_datatables_query();
-        if (isset($params['txt_transID'])) {
-            $this->db->where('a.nobeli', $params['txt_transID']);
+        if (isset($params['dbeli'])) {
+            $this->db->where('a.nobeli', $params['dbeli']);
         }
 
         $query = $this->db->get();
@@ -82,19 +83,24 @@ class M_detailpembelian extends CI_Model
     public function count_all()
     {
         $this->_get_datatables_query();
-        if (isset($params['txt_transID'])) {
-            $this->db->where('a.nobeli', $params['txt_transID']);
+        if (isset($params['dbeli'])) {
+            $this->db->where('a.nobeli', $params['dbeli']);
         }
         return $this->db->count_all_results();
     }
     public function get_by_id($id)
     {
-        $this->db->select("a.nobeli,b.kodebrg,b.namabrg, b.kodesat,c.namasat, a.iddbeli,  a.kodebrg, a.hpp, a.hjual1, a.qtybeli, a.brutto, a.kodesup");
+        $this->db->select("a.nobeli,b.kodebrg,b.namabrg, b.kodesat,c.namasat, a.iddbeli,  a.kodebrg, a.hpp, a.hjual1, a.qtybeli, a.brutto,a.note");
         $this->db->from('inv.dbeli a');
         $this->db->join('inv.barang b', 'a.kodebrg=b.kodebrg');
         $this->db->join('inv.satuan c', 'b.kodesat=c.kodesat');
-        $this->db->WHERE('a.nobeli', $id);
+        $this->db->WHERE('a.iddbeli', $id);
         $query = $this->db->get();
         return $query->row();
+    }
+    public function delete_by_id($id)
+    {
+        $this->db->where('iddbeli', $id);
+        $this->db->delete($this->table);
     }
 }

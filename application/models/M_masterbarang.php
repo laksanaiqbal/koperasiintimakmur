@@ -187,19 +187,13 @@ class M_masterbarang extends CI_Model
         $this->db->update($this->table, $save_data, $where);
         return $this->db->affected_rows();
     }
-    public function update_harga($where, $save_harga)
+    public function update_harga($where, $save_harga_barang)
     {
-        $this->db->select("a.kodebrg,a.barcode,a.namabrg,a.gambar1,a.stokmax,a.stokmin,a.stokmax,a.stokawal,a.stokakhir,a.hpp,a.hrata, a.status,a.hjual1");
-        $this->db->from('barang a');
-        $this->db->join('detail_penjualan b', 'a.kodebrg=b.id_barang');
-        $this->db->update($this->table, $save_harga, $where);
+        $this->db->update($this->table, $save_harga_barang, $where);
         return $this->db->affected_rows();
     }
     public function update_stok($where, $save_stok)
     {
-        $this->db->select("a.kodebrg,a.barcode,a.namabrg,a.gambar1,a.stokmax,a.stokmin,a.stokmax,a.stokawal,a.stokakhir,a.hpp,a.hrata, a.status,a.hjual1");
-        $this->db->from('barang a');
-        $this->db->join('detail_penjualan b', 'a.kodebrg=b.id_barang');
         $this->db->update($this->table, $save_stok, $where);
         return $this->db->affected_rows();
     }
@@ -215,7 +209,9 @@ class M_masterbarang extends CI_Model
     }
     public function get_by_id($kodebrg)
     {
-        $this->db->from($this->table);
+        $this->db->select("a.kodebrg,a.barcode,b.namasat,a.kodeklmpk, a.kodedept, a.kodesup,a.kodesat,a.namabrg,a.gambar1,a.stokmax,a.stokmin,a.stokmax,a.stokawal,a.stokakhir,a.hpp,a.hrata, a.status,a.hjual1");
+        $this->db->from('barang a');
+        $this->db->join('satuan b', 'a.kodesat=b.kodesat');
         $this->db->where('kodebrg', $kodebrg);
         $query = $this->db->get();
 

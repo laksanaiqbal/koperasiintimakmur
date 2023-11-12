@@ -56,16 +56,15 @@
            <!-- Start Date-Time-Picker -->
            <script src="<?php echo base_url(); ?>assets/cuba/assets/js/datepicker/date-time-picker/moment.min.js">
            </script>
-           <script
-               src="<?php echo base_url(); ?>assets/cuba/assets/js/datepicker/date-time-picker/tempusdominus-bootstrap-4.min.js">
+           <script src="<?php echo base_url(); ?>assets/cuba/assets/js/datepicker/date-time-picker/tempusdominus-bootstrap-4.min.js">
            </script>
-           <script
-               src="<?php echo base_url(); ?>assets/cuba/assets/js/datepicker/date-time-picker/datetimepicker.custom.js">
+           <script src="<?php echo base_url(); ?>assets/cuba/assets/js/datepicker/date-time-picker/datetimepicker.custom.js">
            </script>
            <!-- End Date-Time-Picker -->
            <!-- Start Sweet Alert -->
            <script src="<?php echo base_url(); ?>assets/cuba/assets/js/sweet-alert/sweetalert.min.js"></script>
            <!-- End Sweet Alert  -->
+
            </body>
 
            </html>

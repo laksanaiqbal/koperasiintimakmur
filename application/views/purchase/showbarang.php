@@ -1,9 +1,9 @@
-<div class="modal fade bd-example-modal-lg" tabindex="-1" id="showbarang" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="showbarang" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <i class="fa fa-bullhorn">
-                    &nbsp<h4 class="modal-title" id="myLargeModalLabel">
+                    &nbsp<h4 class="modal-title-product" id="myLargeModalLabel">
                 </i></h4>
                 <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -15,12 +15,12 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Kode Barang</th>
+                                        <th>Product Code</th>
                                         <th>Barcode</th>
-                                        <th>Nama</th>
+                                        <th>Product Name</th>
                                         <th>HPP</th>
-                                        <th>Price</th>
-                                        <th>action</th>
+                                        <th>Selling Price</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                             </table>

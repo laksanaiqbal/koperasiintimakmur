@@ -5,8 +5,8 @@ class M_Dpembelian extends CI_Model
 {
 
     var $table = 'hbeli';
-    var $column_order = array(null, 'a.nobeli', 'a.idcabang', 'b.namasup', 'a.tanggalreq', 'a.tanggaldel', 'a.disc1', 'a.hutang', 'a.tbrutto', 'a.biaya', 'a.potongan', 'a.post', 'a.kodesup', 'a.ppn', 'a.faktur'); //set column field database for datatable orderable
-    var $column_search = array('a.nobeli', 'a.idcabang', 'b.namasup', 'a.tanggalreq', 'a.tanggaldel', 'a.disc1', 'a.hutang', 'a.tbrutto', 'a.biaya', 'a.potongan', 'a.post', 'a.kodesup', 'a.ppn', 'a.faktur'); //set column field database for datatable searchable 
+    var $column_order = array(null, 'a.nobeli', 'a.kodebeli', 'a.idcabang', 'b.namasup', 'a.tanggal', 'a.tanggalreq', 'a.tanggaldel', 'a.disc1', 'a.hutang', 'a.tbrutto', 'a.biaya', 'a.potongan', 'a.post', 'a.kodesup', 'a.ppn', 'a.faktur'); //set column field database for datatable orderable
+    var $column_search = array('a.nobeli', 'a.kodebeli', 'a.idcabang', 'b.namasup', 'a.tanggal', 'a.tanggalreq', 'a.tanggaldel', 'a.disc1', 'a.hutang', 'a.tbrutto', 'a.biaya', 'a.potongan', 'a.post', 'a.kodesup', 'a.ppn', 'a.faktur'); //set column field database for datatable searchable 
     var $order = array('a.nobeli' => 'desc'); // default order 
 
     public function __construct()
@@ -23,9 +23,10 @@ class M_Dpembelian extends CI_Model
     {
         $month = date('m') - 3;
         $years = date('Y');
-        $this->db->select("a.nobeli, STR_TO_DATE(a.tanggalreq, '%Y-%m-%d') tanggalreq,STR_TO_DATE(a.tanggaldel, '%Y-%m-%d') tanggaldel,b.namasup,  a.disc1, a.hutang, a.idcabang, a.tbrutto, a.biaya, a.potongan, a.post, a.kodesup, a.ppn, a.faktur");
+        $this->db->select("a.nobeli,a.tanggalreq,a.tanggaldel,b.namasup,a.kodebeli,a.tanggal,  a.disc1, a.hutang, a.idcabang, a.tbrutto, a.biaya, a.potongan, a.post, a.kodesup, a.ppn, a.faktur, c.namacabang");
         $this->db->from('hbeli a');
         $this->db->join('suplier b', 'a.kodesup=b.kodesup');
+        $this->db->join('cabang c', 'a.idcabang=c.idcabang');
 
         // $this->db->where('year(a.tanggalreq)', $years);
         $i = 0;
@@ -64,49 +65,49 @@ class M_Dpembelian extends CI_Model
         $years = date('Y');
 
         //kodesup 
-        if ((!isset($params['nobeli'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
+        if ((!isset($params['kodebeli'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
             $this->db->where('a.kodesup', $params['kodesup']);
         }
-        //nobeli 
-        if ((isset($params['nobeli'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
-            $this->db->where('a.nobeli', $params['nobeli']);
+        //kodebeli 
+        if ((isset($params['kodebeli'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
+            $this->db->where('a.kodebeli', $params['kodebeli']);
         }
-        //kodesup & nobeli
-        if ((isset($params['nobeli'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
-            $this->db->where('a.nobeli', $params['nobeli']);
+        //kodesup & kodebeli
+        if ((isset($params['kodebeli'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
+            $this->db->where('a.kodebeli', $params['kodebeli']);
             $this->db->where('a.kodesup', $params['kodesup']);
         }
         // tgl start & Tgl End
-        if ((!isset($params['nobeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
+        if ((!isset($params['kodebeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
+            $this->db->where('a.tanggal >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+            $this->db->where('a.tanggal <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
         }
         // tgl start 
-        if ((!isset($params['nobeli'])) && (isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+        if ((!isset($params['kodebeli'])) && (isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
+            $this->db->where('a.tanggal >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
         }
         //Tgl End
-        if ((!isset($params['nobeli'])) && (!isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
+        if ((!isset($params['kodebeli'])) && (!isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
+            $this->db->where('a.tanggal <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
         }
-        //nobeli & tgl start & tgl end
-        if ((isset($params['nobeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
-            $this->db->where('a.nobeli', $params['nobeli']);
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
+        //kodebeli & tgl start & tgl end
+        if ((isset($params['kodebeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
+            $this->db->where('a.kodebeli', $params['kodebeli']);
+            $this->db->where('a.tanggal >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+            $this->db->where('a.tanggal <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
         }
         //tgl start & tgl end & kodesup
-        if ((!isset($params['nobeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
+        if ((!isset($params['kodebeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
             $this->db->where('a.kodesup', $params['kodesup']);
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
+            $this->db->where('a.tanggal >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+            $this->db->where('a.tanggal <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
         }
-        //nobeli & tgl start & tgl end & kodesup
-        if ((isset($params['nobeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
-            $this->db->where('a.nobeli', $params['nobeli']);
+        //kodebeli & tgl start & tgl end & kodesup
+        if ((isset($params['kodebeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
+            $this->db->where('a.kodebeli', $params['kodebeli']);
             $this->db->where('a.kodesup', $params['kodesup']);
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
+            $this->db->where('a.tanggal >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+            $this->db->where('a.tanggal <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
         }
 
         if ($_POST['length'] != -1)
@@ -120,49 +121,49 @@ class M_Dpembelian extends CI_Model
         $month = date('m');
         $years = date('Y');
         //kodesup 
-        if ((!isset($params['nobeli'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
+        if ((!isset($params['kodebeli'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
             $this->db->where('a.kodesup', $params['kodesup']);
         }
-        //nobeli 
-        if ((isset($params['nobeli'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
-            $this->db->where('a.nobeli', $params['nobeli']);
+        //kodebeli 
+        if ((isset($params['kodebeli'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
+            $this->db->where('a.kodebeli', $params['kodebeli']);
         }
-        //kodesup & nobeli
-        if ((isset($params['nobeli'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
-            $this->db->where('a.nobeli', $params['nobeli']);
+        //kodesup & kodebeli
+        if ((isset($params['kodebeli'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
+            $this->db->where('a.kodebeli', $params['kodebeli']);
             $this->db->where('a.kodesup', $params['kodesup']);
         }
         // tgl start & Tgl End
-        if ((!isset($params['nobeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
+        if ((!isset($params['kodebeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
+            $this->db->where('a.tanggal >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+            $this->db->where('a.tanggal <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
         }
         // tgl start 
-        if ((!isset($params['nobeli'])) && (isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+        if ((!isset($params['kodebeli'])) && (isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
+            $this->db->where('a.tanggal >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
         }
         //Tgl End
-        if ((!isset($params['nobeli'])) && (!isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
+        if ((!isset($params['kodebeli'])) && (!isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
+            $this->db->where('a.tanggal <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
         }
-        //nobeli & tgl start & tgl end
-        if ((isset($params['nobeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
-            $this->db->where('a.nobeli', $params['nobeli']);
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
+        //kodebeli & tgl start & tgl end
+        if ((isset($params['kodebeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
+            $this->db->where('a.kodebeli', $params['kodebeli']);
+            $this->db->where('a.tanggal >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+            $this->db->where('a.tanggal <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
         }
         //tgl start & tgl end & kodesup
-        if ((!isset($params['nobeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
+        if ((!isset($params['kodebeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
             $this->db->where('a.kodesup', $params['kodesup']);
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
+            $this->db->where('a.tanggal >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+            $this->db->where('a.tanggal <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
         }
-        //nobeli & tgl start & tgl end & kodesup
-        if ((isset($params['nobeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
-            $this->db->where('a.nobeli', $params['nobeli']);
+        //kodebeli & tgl start & tgl end & kodesup
+        if ((isset($params['kodebeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
+            $this->db->where('a.kodebeli', $params['kodebeli']);
             $this->db->where('a.kodesup', $params['kodesup']);
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
+            $this->db->where('a.tanggal >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+            $this->db->where('a.tanggal <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
         }
 
 
@@ -177,49 +178,49 @@ class M_Dpembelian extends CI_Model
         $month = date('m');
         $years = date('Y');
         //kodesup 
-        if ((!isset($params['nobeli'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
+        if ((!isset($params['kodebeli'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
             $this->db->where('a.kodesup', $params['kodesup']);
         }
-        //nobeli 
-        if ((isset($params['nobeli'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
-            $this->db->where('a.nobeli', $params['nobeli']);
+        //kodebeli 
+        if ((isset($params['kodebeli'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
+            $this->db->where('a.kodebeli', $params['kodebeli']);
         }
-        //kodesup & nobeli
-        if ((isset($params['nobeli'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
-            $this->db->where('a.nobeli', $params['nobeli']);
+        //kodesup & kodebeli
+        if ((isset($params['kodebeli'])) && (!isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
+            $this->db->where('a.kodebeli', $params['kodebeli']);
             $this->db->where('a.kodesup', $params['kodesup']);
         }
         // tgl start & Tgl End
-        if ((!isset($params['nobeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
+        if ((!isset($params['kodebeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
+            $this->db->where('a.tanggal >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+            $this->db->where('a.tanggal <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
         }
         // tgl start 
-        if ((!isset($params['nobeli'])) && (isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+        if ((!isset($params['kodebeli'])) && (isset($params['txt_tgl_start'])) &&  (!isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
+            $this->db->where('a.tanggal >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
         }
         //Tgl End
-        if ((!isset($params['nobeli'])) && (!isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
+        if ((!isset($params['kodebeli'])) && (!isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
+            $this->db->where('a.tanggal <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
         }
-        //nobeli & tgl start & tgl end
-        if ((isset($params['nobeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
-            $this->db->where('a.nobeli', $params['nobeli']);
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
+        //kodebeli & tgl start & tgl end
+        if ((isset($params['kodebeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (!isset($params['kodesup']))) {
+            $this->db->where('a.kodebeli', $params['kodebeli']);
+            $this->db->where('a.tanggal >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+            $this->db->where('a.tanggal <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
         }
         //tgl start & tgl end & kodesup
-        if ((!isset($params['nobeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
+        if ((!isset($params['kodebeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
             $this->db->where('a.kodesup', $params['kodesup']);
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
+            $this->db->where('a.tanggal >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+            $this->db->where('a.tanggal <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
         }
-        //nobeli & tgl start & tgl end & kodesup
-        if ((isset($params['nobeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
-            $this->db->where('a.nobeli', $params['nobeli']);
+        //kodebeli & tgl start & tgl end & kodesup
+        if ((isset($params['kodebeli'])) && (isset($params['txt_tgl_start'])) &&  (isset($params['txt_tgl_end'])) &&  (isset($params['kodesup']))) {
+            $this->db->where('a.kodebeli', $params['kodebeli']);
             $this->db->where('a.kodesup', $params['kodesup']);
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
-            $this->db->where('STR_TO_DATE(a.tanggalreq, "%Y-%m-%d") <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
+            $this->db->where('a.tanggal >=', date('Y-m-d', strtotime($params['txt_tgl_start'])));
+            $this->db->where('a.tanggal <=', date('Y-m-d', strtotime($params['txt_tgl_end'])));
         }
         return $this->db->count_all_results();
     }
@@ -235,6 +236,11 @@ class M_Dpembelian extends CI_Model
     public function update($where, $save_data)
     {
         $this->db->update($this->table, $save_data, $where);
+        return $this->db->affected_rows();
+    }
+    public function update_tbrutto($where, $save_tbrutto)
+    {
+        $this->db->update($this->table, $save_tbrutto, $where);
         return $this->db->affected_rows();
     }
     public function delete_by_id($id)
@@ -258,7 +264,9 @@ class M_Dpembelian extends CI_Model
     }
     public function get_by_id($nobeli)
     {
-        $this->db->from($this->table);
+        $this->db->select("a.nobeli,a.tanggalreq,a.tanggaldel,b.namasup,a.kodebeli,a.tanggal,  a.disc1, a.hutang, a.idcabang, a.tbrutto, a.biaya, a.potongan, a.post, a.kodesup, a.ppn, a.faktur, a.nilaidisc1, a.nilaippn, a.nilaifak");
+        $this->db->from('hbeli a');
+        $this->db->join('suplier b', 'a.kodesup=b.kodesup');
         $this->db->where('nobeli', $nobeli);
         $query = $this->db->get();
 

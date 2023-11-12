@@ -1,27 +1,26 @@
-<div class="modal fade bd-example-modal-lg" tabindex="-1" id="showsup" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="showsup" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <i class="fa fa-bullhorn">
-                    &nbsp<h4 class="modal-title" id="myLargeModalLabel">
+                    &nbsp<h4 class="modal-title-sup" id="myLargeModalLabel">
                 </i></h4>
                 <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="col-sm-12">
-                    <!-- <div class="card"> -->
                     <div class="card-body">
                         <div class="dt-ext table-responsive">
                             <table class="display" id="datatable_sup" style="color: Black;">
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Kode Sup</th>
-                                        <th>Nama</th>
+                                        <th>Suplier Code</th>
+                                        <th>Name</th>
                                         <th>Telp</th>
                                         <th>BANK</th>
-                                        <th>Rekening</th>
-                                        <th>Alamat</th>
+                                        <th>Account</th>
+                                        <th>Address</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
