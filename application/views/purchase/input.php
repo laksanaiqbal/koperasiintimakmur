@@ -105,12 +105,12 @@
                                         <div id="buttonbaru"></div>
                                         <thead>
                                             <tr>
-                                                <th>No</th>
-                                                <th>Product Name</th>
-                                                <th>QTY</th>
-                                                <th>Unit</th>
-                                                <th>Total</th>
-                                                <th>Note</th>
+                                                <th style="width: 30px;">No</th>
+                                                <th style="width: 250px;">Product Name</th>
+                                                <th style="width: 200px;">QTY</th>
+                                                <th style="width: 200px;">Unit</th>
+                                                <!-- <th style="width: 200px;">Total</th> -->
+                                                <th style="width: 200px;">Note</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -126,6 +126,50 @@
 </div>
 
 <script>
+    $(document).ready(function(e) {
+
+        $("#cabang").select2({
+            dropdownParent: $("#forminput .modal-content")
+        });
+        $('#cabang').on('select2:open', function(e) {
+            const evt = "scroll.select2";
+            $(e.target).parents().off(evt);
+            $(window).off(evt);
+        });
+        $("#ppn").select2({
+            dropdownParent: $("#forminput .modal-content")
+        });
+        $('#ppn').on('select2:open', function(e) {
+            const evt = "scroll.select2";
+            $(e.target).parents().off(evt);
+            $(window).off(evt);
+        });
+        $("#diskon").select2({
+            dropdownParent: $("#forminput .modal-content")
+        });
+        $('#diskon').on('select2:open', function(e) {
+            const evt = "scroll.select2";
+            $(e.target).parents().off(evt);
+            $(window).off(evt);
+        });
+        $("#faktur").select2({
+            dropdownParent: $("#forminput .modal-content")
+        });
+        $('#faktur').on('select2:open', function(e) {
+            const evt = "scroll.select2";
+            $(e.target).parents().off(evt);
+            $(window).off(evt);
+        });
+        $("#payment").select2({
+            dropdownParent: $("#forminput .modal-content")
+        });
+        $('#payment').on('select2:open', function(e) {
+            const evt = "scroll.select2";
+            $(e.target).parents().off(evt);
+            $(window).off(evt);
+        });
+    })
+
     function PrintIT(divIT) {
         var kodebeliss = $("#PO").val();
         var tglreqss = $("#tanggalreq").val();
@@ -165,15 +209,6 @@
         docprint.document.write('</h5><center><hr>');
         docprint.document.write(content_vluess);
         docprint.document.write('</center><hr><br>');
-        // docprint.document.write('<h4 style="margin-bottom: 0px; "> > Grand Total = Rp. ');
-        // docprint.document.write(gtotal);
-        // docprint.document.write('</h4>');
-        // docprint.document.write('<h4 style="margin-top: 0px;margin-bottom: 0px; "> > Discount &nbsp;&nbsp;&nbsp;&nbsp; = Rp. ');
-        // docprint.document.write(dis);
-        // docprint.document.write('</h4>');
-        // docprint.document.write('<h4 style="margin-top: 0px; "> > Tax &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= Rp. ');
-        // docprint.document.write(tax);
-        // docprint.document.write('</h4>');
         docprint.document.write('</body></html>');
         docprint.document.close();
         docprint.focus();
@@ -202,15 +237,12 @@
         $('#forminput').modal('show'); // show bootstrap modal when complete loaded
         $('.modal-title').text('  Purchase Input'); // Set Title to Bootstrap modal title
         table_baru.ajax.reload(null);
-
     });
 
     $('.modal').css('overflow-y', 'auto');
     $('#btn_close').click(function() { //button filter event click
         $('#forminput').modal('hide'); // show bootstrap modal when complete loaded
     });
-
-
 
     var table_baru;
     $(document).ready(function(e) {
@@ -235,7 +267,7 @@
             "info": false,
             "order": [], //Initial no order.
             "ajax": {
-                "url": "<?php echo site_url('C_pembelian/ajax_list_detail') ?>",
+                "url": "<?php echo site_url('C_pembelian/ajax_list_input') ?>",
                 "type": "POST",
                 "data": function(data) {
                     $('#loader').hide();

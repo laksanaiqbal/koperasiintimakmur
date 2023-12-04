@@ -29,7 +29,7 @@ class C_masterbarang extends CI_Controller
     public function index()
     {
         $data = array(
-            'title_form' => 'Master Barang',
+            'title_form' => '<i class="fa fa-arrow-circle-right"></i> Master Barang',
             'url_back'   => site_url('C_masterbarang'),
         );
 
@@ -45,9 +45,10 @@ class C_masterbarang extends CI_Controller
 
     public function ajax_list()
     {
-        $start  = $_REQUEST['start']; //tambahan limit
+        $start  = $_REQUEST['start']; //tambahan limit 
         $length = $_REQUEST['length'];
         $params = array();
+
         if ($this->input->post('txt_nmkary')) {
             $params['txt_nmkary'] = $this->input->post('txt_nmkary');
         }
@@ -243,32 +244,31 @@ class C_masterbarang extends CI_Controller
         $out['is_error']       = true;
         $out['error_message']  = "";
         $post_data  = $this->input->post();
-        $this->form_validation->set_rules('kodebrg', 'Input Kode', 'required');
-        $this->form_validation->set_rules('barcode', 'Input Barcode', 'required');
-        $this->form_validation->set_rules('kelompok', 'Input Kelompok', 'required');
-        $this->form_validation->set_rules('dept', 'Input dept', 'unrequired');
-        $this->form_validation->set_rules('satuan', 'Input satuan', 'required');
-        $this->form_validation->set_rules('namabrg', 'Input Nama', 'required');
-        $this->form_validation->set_rules('stokakhir', 'Input Stok');
-        $this->form_validation->set_rules('stokmin', 'Input Stok', 'required');
-        $this->form_validation->set_rules('stokmax', 'Input Stok', 'required');
-        $this->form_validation->set_rules('hpp', 'Input HPP', 'required');
-        $this->form_validation->set_rules('hjual', 'Input Price', 'required');
-        $this->form_validation->set_rules('kodekategori', 'Input Kode Kategori', 'required');
-        $this->form_validation->set_rules('gambar1', 'Input Gambar', 'unrequired');
+        $this->form_validation->set_rules('idupdate', 'Input Kode Barang', 'required');
+        $this->form_validation->set_rules('barcodes', 'Input Barcode', 'required');
+        $this->form_validation->set_rules('kelompoks', 'Input Kelompok', 'required');
+        $this->form_validation->set_rules('satuans', 'Input satuan', 'required');
+        $this->form_validation->set_rules('namabarang', 'Input Nama', 'required');
+        $this->form_validation->set_rules('stokakhirs', 'Input Stok');
+        $this->form_validation->set_rules('stokmins', 'Input Stok', 'required');
+        $this->form_validation->set_rules('stokmaxs', 'Input Stok', 'required');
+        $this->form_validation->set_rules('hpps', 'Input HPP', 'required');
+        $this->form_validation->set_rules('hjuals', 'Input Price', 'required');
+        $this->form_validation->set_rules('kodekategoris', 'Input Kategori', 'required');
+        $this->form_validation->set_rules('image', 'Input Gambar', 'unrequired');
 
         if ($this->form_validation->run() == false) {
             $out['is_error']       = true;
             $out['error_message']  = validation_errors();
         } else {
-            $gambar1 = $_FILES['gambar1']['tmp_name'];
-            $kodebrg = $this->input->post('kodebrg');
+            $image = $_FILES['image']['tmp_name'];
+            $kodebrg = $this->input->post('kodebarang');
             $target_file = './assets/barang/';
             $imagePath = $target_file . $kodebrg . ".png";
             $imagename = $kodebrg . ".png";
-            move_uploaded_file($gambar1, $imagePath);
-            $stokawal = $this->input->post('stokawal');
-            $stokakhir = $this->input->post('stokakhir');
+            move_uploaded_file($image, $imagePath);
+            $stokawal = $this->input->post('stokawals');
+            $stokakhir = $this->input->post('stokakhirs');
             if (!empty($stokakhir)) {
                 $stokbaru = $stokawal + $stokakhir;
             } elseif (empty($stokakhir)) {
@@ -276,8 +276,8 @@ class C_masterbarang extends CI_Controller
             } elseif ($stokakhir == NULL) {
                 $stokbaru = '0';
             }
-            $stokmax = $this->input->post('stokmax');
-            $stokmin = $this->input->post('stokmin');
+            $stokmax = $this->input->post('stokmaxs');
+            $stokmin = $this->input->post('stokmins');
             if ($stokbaru > $stokmax) {
                 $stokbaru = $stokawal;
             } elseif ($stokbaru < $stokmin) {
@@ -285,18 +285,18 @@ class C_masterbarang extends CI_Controller
             }
             $save_data = array(
                 'gambar1' => $imagename,
-                'kodebrg' => $post_data['kodebrg'],
-                'barcode' => $post_data['barcode'],
-                'kodeklmpk' => $post_data['kelompok'],
+                'kodebrg' => $post_data['idupdate'],
+                'barcode' => $post_data['barcodes'],
+                'kodeklmpk' => $post_data['kelompoks'],
                 'kodedept' => '01',
-                'kodesat' => $post_data['satuan'],
-                'namabrg' => $post_data['namabrg'],
+                'kodesat' => $post_data['satuans'],
+                'namabrg' => $post_data['namabarang'],
                 'stokawal' => $stokbaru,
-                'stokmin' => $post_data['stokmin'],
-                'stokmax' => $post_data['stokmax'],
-                'hpp' => $post_data['hpp'],
-                'hjual1' => $post_data['hjual'],
-                'kodekategori' => $post_data['kodekategori'],
+                'stokmin' => $post_data['stokmins'],
+                'stokmax' => $post_data['stokmaxs'],
+                'hpp' => $post_data['hpps'],
+                'hjual1' => $post_data['hjuals'],
+                'kodekategori' => $post_data['kodekategoris'],
                 'status' => '1',
             );
             $save_logs = array(
@@ -305,12 +305,12 @@ class C_masterbarang extends CI_Controller
                 'EMP_NAME' => $this->session->userdata('NAMA'),
                 'TABLE_NAME' => 'inv.barang',
                 'TRANS_ID' =>  $post_data['idupdate'],
-                'TRANS_DESC' =>  $post_data['namabrg'],
+                'TRANS_DESC' =>  $post_data['namabarang'],
                 'CREATE_SYSTEM' =>  date('Y-m-d H:i:s'),
                 'ACTIONS' => 'UPDATES'
             );
 
-            $this->M_masterbarang->update(array('kodebrg' => $this->input->post('kodebrg')), $save_data);
+            $this->M_masterbarang->update(array('kodebrg' => $this->input->post('idupdate')), $save_data);
             $this->M_masterbarang->save_log($save_logs);
             if ($this->db->trans_status() == FALSE) {
                 $this->db->trans_rollback();

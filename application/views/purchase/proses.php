@@ -10,25 +10,16 @@
             <div class="modal-body">
                 <div class="col-sm-12">
                     <div class="card" style="margin-bottom: 0px;">
-                        <div class="mb-2 row">
-                            <h6><i class="fa fa-circle"></i> <u>Purchase Order</u></h6>
-                        </div>
-                        <div class="card-body" style="padding-top: 0px;padding-bottom: 0px;">
-                            <form method="POST" id="frm_Edit_Pembelian" class="theme-form">
+                        <div class="card-body" style="padding-top: 0px;">
+                            <form method="POST" id="form_proses" class="theme-form">
                                 <input hidden name="idtemp4" id="idtemp4">
                                 <input hidden name="kodebelis" id="kodebelis">
-                                <div class="mb-12 row" hidden>
-                                    <label class="col-sm-2 col-form-label" for="id_pembelians">ID</label>
-                                    <div class="col-sm-2">
-                                        <input class="form-control" id="id_pembelians" name="id_pembelians" type="text" Readonly>
-                                    </div>
-                                </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-2 row">
                                             <label class="col-sm-3 col-form-label" for="cabangss">Branch</label>
                                             <div class="col-sm-8">
-                                                <select name="cabangss" id="cabangss" class="form-control">
+                                                <select name="cabangss" id="cabangss" class="form-control" disabled>
                                                     <?php foreach ($datacabang as $data) : ?>
                                                         <option value="<?php echo $data->idcabang ?>"><?php echo $data->namacabang ?></option>
                                                     <?php endforeach ?>
@@ -38,7 +29,7 @@
                                         <div class="mb-2 row">
                                             <label class="col-sm-3 col-form-label" for="paymentss">Payment</label>
                                             <div class="col-sm-8">
-                                                <select name="paymentss" id="paymentss">
+                                                <select name="paymentss" id="paymentss" disabled>
                                                     <option value="0">Cash</option>
                                                     <option value="1">Debt</option>
                                                 </select>
@@ -48,7 +39,7 @@
                                             <label class="col-sm-3 col-form-label" for="kodesupss">Suplier</label>
                                             <input hidden name="namasupss" id="namasupss">
                                             <div class="col-sm-8">
-                                                <select name="kodesupss" id="kodesupss" class="form-control select2" data dropdown-parent="#frmEditHeader" disabled>
+                                                <select name="kodesupss" id="kodesupss" class="form-control select2" disabled>
                                                     <?php foreach ($datasup as $data) : ?>
                                                         <option value="<?php echo $data->kodesup ?>"><?php echo $data->namasup ?></option>
                                                     <?php endforeach ?>
@@ -58,7 +49,7 @@
                                         <div class="mb-2 row">
                                             <label class="col-sm-3 col-form-label" for="fak">Invoice</label>
                                             <div class="col-sm-8">
-                                                <select name="fak" id="fak" class="form-control select2" data dropdown-parent="#frmEditHeader">
+                                                <select name="fak" id="fak" class="form-control select2" disabled>
                                                     <option value="0">NO</option>
                                                     <option value="1">YES</option>
                                                 </select>
@@ -69,19 +60,19 @@
                                         <div class="mb-2 row">
                                             <label class="col-sm-3 col-form-label" for="tanggalreqss">Request Date</label>
                                             <div class="col-sm-8">
-                                                <input style="height: 40px;" class="form-control" id="tanggalreqss" name="tanggalreqss" type="date" placeholder="Type Jumlah Here">
+                                                <input style="height: 40px;" class="form-control" id="tanggalreqss" name="tanggalreqss" type="date" placeholder="Type Jumlah Here" disabled>
                                             </div>
                                         </div>
                                         <div class="mb-2 row">
                                             <label class="col-sm-3 col-form-label" for="tanggaldelss">Deliver Date</label>
                                             <div class="col-sm-8">
-                                                <input style="height: 40px;" class="form-control" id="tanggaldelss" name="tanggaldelss" type="date" placeholder="Type Jumlah Here">
+                                                <input style="height: 40px;" class="form-control" id="tanggaldelss" name="tanggaldelss" type="date" placeholder="Type Jumlah Here" disabled>
                                             </div>
                                         </div>
                                         <div class="mb-2 row">
                                             <label class="col-sm-3 col-form-label" for="ppnss">Tax</label>
                                             <div class="col-sm-8">
-                                                <select name="ppnss" id="ppnss" class="form-control select2" data dropdown-parent="#frmEditHeader">
+                                                <select name="ppnss" id="ppnss" class="form-control select2" disabled>
                                                     <option value="0">NO</option>
                                                     <option value="1">YES</option>
                                                 </select>
@@ -90,37 +81,48 @@
                                         <div class="mb-2 row">
                                             <label class="col-sm-3 col-form-label" for="diskonss">Discount</label>
                                             <div class="col-sm-8">
-                                                <select name="diskonss" id="diskonss" class="form-control select2" data dropdown-parent="#frmEditHeader">
+                                                <select name="diskonss" id="diskonss" class="form-control select2" disabled>
                                                     <option value="0">NO</option>
                                                     <option value="1">YES</option>
                                                 </select>
                                             </div>
                                         </div>
-
                                     </div>
-                                    <div class="card-body" style="padding-top: 0px;">
+                                    <div class="card-body" style="padding-top: 0px;padding-bottom:0px">
                                         <button onclick="cetak('disini')" class="btn btn-danger mb-2 row" type="button" title="cetak"><i class="fa fa-print">&nbsp Print Preview!</i></button>
                                         <div id="disini">
                                             <div class="table-responsive">
                                                 <table class="display" style="text-align: center;" id="datatable_proses">
                                                     <thead>
                                                         <tr>
-                                                            <th style="width: 90px;">No</th>
-                                                            <th style="width: 150px;">Product Name</th>
-                                                            <th style="width: 90px;">QTY</th>
-                                                            <th style="width: 90px;">Unit</th>
-                                                            <th style="width: 90px;">Total</th>
-                                                            <th style="width: 90px;">Note</th>
+                                                            <th style="width: 30px;">No</th>
+                                                            <th style="width: 250px;">Product Name</th>
+                                                            <th style="width: 200px;">QTY</th>
+                                                            <th style="width: 200px;">Unit</th>
+                                                            <!-- <th style="width: 200px;">Total</th> -->
+                                                            <th style="width: 200px;">Note</th>
                                                         </tr>
                                                     </thead>
                                                 </table>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-sm-12" style="text-align: center;">
+                                                <input hidden name="totalan" id="totalan">
+                                                <h1 style="padding-top: 10px;">TOTAL = <span id="totalans"></span></h1>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="card-footer text-end" style="padding-bottom: 0px;">
-                                        <button type="submit" id="btnEdit" class="btn btn-pill btn-outline-primary-2x btn-air-primary"><i class="fa fa-send-o">
-                                                Save</i></button>
-                                        <button class="btn btn-pill btn-outline-info-2x btn-air-info" data-bs-dismiss="modal"><i class="fa fa-xing"></i> Cancel</i> </button>
+                                    <div class="card-footer text-end" style="padding-bottom: 0px;padding-top:0%;">
+                                        <p style="text-align: center;"><i>"You can click the <strong>Finish</strong> Button when your all Purchases in <span id=preorder></span> is done"</i> &nbsp;
+                                        </p>
+                                        <div class="row" id="sangar">
+                                            <p style="text-align: center;">
+                                                <button onclick="clicked(event)" type="submit" id="btnbtn" class="btn btn-pill btn-outline-primary-2x btn-air-primary"><i class="fa fa-thumbs-o-up"></i>
+                                                    Finish!</i></button>
+                                                <button class="btn btn-pill btn-outline-info-2x btn-air-info" data-bs-dismiss="modal"><i class="fa fa-xing"></i> Cancel</i> </button>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -133,11 +135,18 @@
 </div>
 
 <script type="text/javascript">
+    function clicked(e) {
+        if (!confirm('Are you sure?')) {
+            e.preventDefault();
+        }
+    }
+
     function cetak(disini) {
         var kodebeliss = $("#kodebelis").val();
         var tglreqss = $("#tanggalreqss").val();
         var tgldelss = $("#tanggaldelss").val();
         var supss = $("#namasupss").val();
+        var totalan = $("#totalan").val();
         var disp_setting = "toolbar=yes,location=no,";
         disp_setting += "directories=yes,menubar=yes,";
         // disp_setting += "scrollbars=yes,width=650, height=600, left=100, top=25";
@@ -170,17 +179,9 @@
         docprint.document.write(supss);
         docprint.document.write('</h5><center><hr>');
         docprint.document.write(content_vluess);
-        docprint.document.write('</center><hr><br>');
-        // docprint.document.write('<h4 style="margin-bottom: 0px; "> > Grand Total = Rp. ');
-        // docprint.document.write(gtotal);
-        // docprint.document.write('</h4>');
-        // docprint.document.write('<h4 style="margin-top: 0px;margin-bottom: 0px; "> > Discount &nbsp;&nbsp;&nbsp;&nbsp; = Rp. ');
-        // docprint.document.write(dis);
-        // docprint.document.write('</h4>');
-        // docprint.document.write('<h4 style="margin-top: 0px; "> > Tax &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= Rp. ');
-        // docprint.document.write(tax);
-        // docprint.document.write('</h4>');
-        docprint.document.write('</body></html>');
+        docprint.document.write('</center><hr><h2 style="text-align: right;margin-top:0px">Total: Rp. <i>');
+        docprint.document.write(totalan);
+        docprint.document.write(',00</i></h2><hr></body></html>');
         docprint.document.close();
         docprint.focus();
     }
@@ -206,6 +207,19 @@
     var table_proses;
     $(document).ready(function(e) {
         table_proses = $('#datatable_proses').DataTable({
+            // 'ajax': 'https://api.myjson.com/bins/1us28',
+            // 'columnDefs': [{
+            //     'targets': 0,
+            //     'checkboxes': {
+            //         'selectRow': true
+            //     }
+            // }],
+            // 'select': {
+            //     'style': 'multi'
+            // },
+            // 'order': [
+            //     [1, 'asc']
+            // ],
             "createdRow": function(row, data, dataIndex) {
                 $(row).addClass('black');
             },
@@ -225,7 +239,7 @@
             "overflow": false,
             "info": false,
             "ajax": {
-                "url": "<?php echo site_url('C_pembelian/ajax_list_detail') ?>",
+                "url": "<?php echo site_url('C_pembelian/ajax_list_proses') ?>",
                 "type": "POST",
                 "data": function(data) {
                     $('#loader').hide();
@@ -246,10 +260,10 @@
         });
         var buttons = new $.fn.dataTable.Buttons(table_proses, {}).container().appendTo($('#buttonedit'));
     })
-    $('#frm_Edit_Pembelian').submit(function(e) {
-        urls = "<?php echo site_url('C_pembelian/edit_header') ?>";
-        // var data = $(this).serialize();
-        var data = new FormData($('#frm_Edit_Pembelian')[0]);
+
+    $('#form_proses').submit(function(e) {
+        urls = "<?php echo site_url('C_pembelian/proses') ?>";
+        var data = new FormData($('#form_proses')[0]);
         $.ajax({
             url: urls,
             type: 'POST',
@@ -278,8 +292,8 @@
                         type: "success"
                     });
                     table_pembelian.ajax.reload();
-                    document.getElementById("frm_Edit_Pembelian").reset();
-                    $('#frmEditHeader').modal('hide');
+                    document.getElementById("form_proses").reset();
+                    $('#proses').modal('hide');
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -315,14 +329,20 @@
                 $('#ppnss').val(data.ppn).trigger('change');
                 $('#fak').val(data.faktur).trigger('change');
                 $('#diskonss').val(data.disc1).trigger('change');
-                $('[name="nobelis"]').val(data.nobeli);
                 $('[name="idtemp4"]').val(data.nobeli);
-                $('[name="id_pembelians"]').val(data.nobeli);
                 $('[name="kodebelis"]').val(data.kodebeli);
+                $('[name="totalan"]').val(data.tbrutto);
+                document.getElementById("totalans").innerHTML = "Rp. " + data.tbrutto + ",00";
+                document.getElementById("preorder").innerHTML = '<strong><u>"' + data.kodebeli + '"</u></strong>';
 
-                document.getElementById("inputFormBarang").reset();
+                if (data.tbrutto === "0") {
+                    $('#btnbtn').attr('disabled', 'disabled');
+                } else {
+                    $('#btnbtn').removeAttr('disabled');
+                }
+
                 $('#proses').modal('show'); // show bootstrap modal when complete loaded
-                $('.modal-title-proses').text('Process ' + data.kodebeli); // Set Title to Bootstrap modal title
+                $('.modal-title-proses').text(data.kodebeli); // Set Title to Bootstrap modal title
                 $('.modal-subtitle').text('Input Product'); // Set Title to Bootstrap modal title
                 table_proses.ajax.reload(null);
             },

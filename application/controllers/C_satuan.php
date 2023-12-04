@@ -24,7 +24,7 @@ class C_satuan extends CI_Controller
     public function index()
     {
         $data = array(
-            'title_form' => 'Satuan',
+            'title_form' => '<i class="fa fa-arrow-circle-right"></i> Satuan',
             'url_back'   => site_url('C_satuan')
         );
         $this->load->view('template/header');

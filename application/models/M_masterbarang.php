@@ -29,7 +29,12 @@ class M_masterbarang extends CI_Model
         $years = date('Y');
         $this->db->select("a.kodebrg, a.barcode, a.namabrg, a.gambar1, a.stokawal, a.stokmin, a.stokmax, a.stokakhir, a.hpp, a.hrata, a.status, a.kodekategori, a.hjual1,(a.hjual1-a.hpp) profit,(a.hpp*a.stokakhir) TotAsset");
         $this->db->from('barang a');
-        // $this->db->where('year(a.tanggal)', $years);
+
+        // $this->db->select("a.kodebrg,SUM(b.qtybeli) TotIn, a.barcode, a.namabrg, a.gambar1, a.stokawal, a.stokmin, a.stokmax, a.stokakhir, a.hpp, a.hrata, a.status, a.kodekategori, a.hjual1,(a.hjual1-a.hpp) profit,(a.hpp*a.stokakhir) TotAsset");
+        // $this->db->from('barang a');
+        // $this->db->join('dbeli b', 'a.kodebrg=b.kodebrg');
+        // $this->db->where('b.status=1');
+        // $this->db->group_by('a.kodebrg');
         $i = 0;
 
         foreach ($this->column_search as $item) // loop column 
@@ -169,7 +174,7 @@ class M_masterbarang extends CI_Model
         // $this->db->from($this->table);
         $this->_get_datatables_querys();
         if (isset($params['txt_nmkary'])) {
-            $this->db->like('a.kodebrg', $params['txt_nmkary']);
+            $this->db->where('a.kodebrg', $params['txt_nmkary']);
         }
         return $this->db->count_all_results();
     }
@@ -209,7 +214,7 @@ class M_masterbarang extends CI_Model
     }
     public function get_by_id($kodebrg)
     {
-        $this->db->select("a.kodebrg,a.barcode,b.namasat,a.kodeklmpk, a.kodedept, a.kodesup,a.kodesat,a.namabrg,a.gambar1,a.stokmax,a.stokmin,a.stokmax,a.stokawal,a.stokakhir,a.hpp,a.hrata, a.status,a.hjual1");
+        $this->db->select("a.kodebrg,a.barcode,b.namasat,a.kodeklmpk, a.kodedept, a.kodesup,a.kodesat,a.namabrg,a.gambar1,a.stokmax,a.stokmin,a.stokmax,a.stokawal,a.stokakhir,a.hpp,a.hrata, a.status,a.hjual1, a.kodekategori");
         $this->db->from('barang a');
         $this->db->join('satuan b', 'a.kodesat=b.kodesat');
         $this->db->where('kodebrg', $kodebrg);

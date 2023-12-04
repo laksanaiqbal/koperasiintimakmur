@@ -15,9 +15,9 @@
                      <div class="card-body">
                          <form method="POST" id="frm_Edit" class="theme-form">
                              <div class="mb-3 row">
-                                 <label style="color: white;" class="col-sm-3 col-form-label" for="kodecus">Kode Cust</label>
+                                 <label class="col-sm-3 col-form-label" for="kodecus">Kode Cust</label>
                                  <div class="col-sm-3">
-                                     <input type="hidden" class="form-control" id="kodecus" name="kodecus" type="number" placeholder="Type Code Here">
+                                     <input readonly class="form-control" id="kodecus" name="kodecus" type="number" placeholder="Type Code Here">
                                  </div>
                              </div>
                              <div class="mb-3 row">

@@ -25,7 +25,7 @@ class C_suplier extends CI_Controller
     public function index()
     {
         $data = array(
-            'title_form' => 'Daftar Suplier',
+            'title_form' => '<i class="fa fa-arrow-circle-right"></i> Daftar Suplier',
             'url_back'   => site_url('C_suplier')
         );
         $this->load->view('template/header');

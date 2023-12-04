@@ -32,7 +32,7 @@ class C_penjualan extends CI_Controller
     public function index()
     {
         $data = array(
-            'title_form' => 'penjualan',
+            'title_form' => '<i class="fa fa-arrow-circle-right"></i> Penjualan',
             'url_back'   => site_url('C_penjualan')
         );
         $data['datasat'] = $this->M_satuan->getdata();

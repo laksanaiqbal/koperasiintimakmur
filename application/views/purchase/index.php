@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <form class="theme-form" id="frm_index">
-                    <div class="mb-3 row">
+                    <div class="mb-2 row">
                         <label class="col-sm-2 col-form-label" for="txt_tgl_start">From</label>
                         <div class="col-sm-4">
                             <input class="datepicker-here form-control digits" data-language="en" id="txt_tgl_start" name="txt_tgl_start" type="text" placeholder="Choose your date">
@@ -35,22 +35,10 @@
                             <input class="datepicker-here form-control digits" data-language="en" id="txt_tgl_end" name="txt_tgl_end" type="text" placeholder="Choose your date">
                         </div>
                     </div>
-                    <div class="mb-3 row">
+                    <div class="mb-2 row">
                         <label class="col-sm-2 col-form-label" for="kodebeli">Purchase Code</label>
                         <div class="col-sm-4">
-                            <?php
-                            $this->db->select("kodebeli");
-                            $this->db->from('hbeli a');
-                            $this->db->order_by('kodebeli', 'ASC');
-                            $pembelian = $this->db->get(); ?>
-                            <select id="kodebeli" name="kodebeli">
-                                <option value="">Please Select</option>
-                                <?php
-                                foreach ($pembelian->result() as $rowpembelian) {
-                                    echo "<option value='$rowpembelian->kodebeli'>$rowpembelian->kodebeli</option>";
-                                }
-                                ?>
-                            </select>
+                            <input class="form-control" id="kodebeli" name="kodebeli" type="text" placeholder="Type kodebeli Here">
                         </div>
                         <label class="col-sm-2 col-form-label" for="kodesup">Suplier</label>
                         <div class="col-sm-4">
@@ -70,8 +58,14 @@
                             </select>
                         </div>
                     </div>
+                    <div class="mb-2 row">
+                        <!-- <label class="col-sm-2 col-form-label" for="kodesup">Purchase Code</label>
+                        <div class="col-sm-4 search">
 
-                    <div class="mb-3 row">
+                        </div> -->
+
+                    </div>
+                    <div class="mb-2 row">
                         <div class="col-sm-12" style="text-align: right;">
                             <button id="btn_reset" class="btn btn-pill btn-outline-info btn-air-info" type="button" title="Reload Record"><i class="fa fa-refresh"> Reload Record</i></button>
                             <button id="btn_cari" class="btn btn-pill btn-outline-info btn-air-info" type="button" title="Find Record"><i class="fa fa-send-o"> Find Record</i></button>
@@ -88,12 +82,10 @@
                                 <th>Store</th>
                                 <th>Purchase Date</th>
                                 <th>Suplier</th>
-                                <th>Payment</th>
                                 <th>Total</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
-
                         <tfoot>
                             <tr>
                                 <th>No</th>
@@ -101,7 +93,6 @@
                                 <th>store</th>
                                 <th>Purchase Date</th>
                                 <th>Suplier</th>
-                                <th>Payment</th>
                                 <th>Total</th>
                                 <th>Status</th>
                             </tr>
@@ -114,52 +105,30 @@
 </div>
 
 <?php $this->load->view('purchase/input') ?>
-<?php $this->load->view('purchase/inputbarang') ?>
-<?php $this->load->view('purchase/process') ?>
 <?php $this->load->view('purchase/editpembelian') ?>
+<?php $this->load->view('purchase/inputbarang') ?>
+<?php $this->load->view('purchase/inputbarang2') ?>
 <?php $this->load->view('purchase/showbarang') ?>
 <?php $this->load->view('purchase/suplier') ?>
 <?php $this->load->view('purchase/cetak_pembelian') ?>
 <?php $this->load->view('purchase/proses') ?>
 <?php $this->load->view('purchase/edit') ?>
 
-
-
 <script type="text/javascript">
     $('.modal').css('overflow-y', 'auto');
     $(document).ready(function(e) {
-        setInterval(function() {
-            $("#sums").load(window.location.href + " #sums");
-        }, 2500);
-        $("#kodebeli").select2({
-            dropdownParent: $("#frm_index")
-        });
+        // $("#kodebeli").select2({
+        //     dropdownParent: $("#frm_index")
+        // });
         $("#kodesup").select2({
             dropdownParent: $("#frm_index")
         });
-        $("#cabang").select2({
-            dropdownParent: $("#forminput")
-        });
-        $("#ppn").select2({
-            dropdownParent: $("#forminput")
-        });
-        $("#diskon").select2({
-            dropdownParent: $("#forminput")
-        });
-        $("#faktur").select2({
-            dropdownParent: $("#forminput")
-        });
-        $("#payment").select2({
-            dropdownParent: $("#forminput")
-        });
-
     })
 
 
     var table_pembelian;
     $(document).ready(function(e) {
         table_pembelian = $('#datatable_pembelian').DataTable({
-
             "lengthMenu": [
                 [10, 50, 75, 100, -1],
                 [10, 50, 75, 100, "All"]
@@ -170,8 +139,11 @@
             },
             "processing": true, //Feature control the processing indicator.
             "serverSide": true, //Feature control DataTables' server-side processing mode.
-            "searching": true,
             "autoWidth": false,
+            "searching": true,
+            "oLanguage": {
+                sSearch: "",
+            },
             "info": true,
             // "scrollY": 455,
             "scrollX": true,
@@ -198,13 +170,19 @@
                 },
             ],
         });
+        $('#datatable_pembelian_filter').detach().prependTo('.search')
+        $('.dataTables_filter input[type="search"]').css({
+            'width': '140%',
+            'display': 'inline-block'
+        });
+        $('.dataTables_filter input[type="search"]').attr('placeholder', 'What are You Looking for?');
         var buttons = new $.fn.dataTable.Buttons(table_pembelian, {}).container().appendTo($('#button_pembelian'));
     })
 
 
     $('#btn_reset').click(function() { //button reset event click
-        $('[name="kodebeli"]').select2().val('').trigger('change');
         $('[name="txt_tgl_start"]').val('');
+        $('[name="kodebeli"]').val('');
         $('[name="txt_tgl_end"]').val('');
         $('[name="kodesup"]').select2().val('').trigger('change');
 
@@ -222,7 +200,6 @@
     function scrollWin() {
         window.scrollBy(0, 500);
     };
-
 
     function delete_data(id) {
         var data_id = id;
@@ -265,7 +242,6 @@
                     swal("Your imaginary file is still disable!");
                 }
             })
-
     }
 
     function previewGambar() {
@@ -293,49 +269,6 @@
             imgPreview.src = oFREvent.target.result;
         }
     }
-    $('#btn_show').click(function() { //button filter event click
-        $('#showbarang').modal('show'); // show bootstrap modal when complete loaded
-    });
-    $('#btn_sup').click(function() { //button filter event click
-        $('#showsup').modal('show'); // show bootstrap modal when complete loaded
-        $('.modal-title-sup').text('Choose Suplier'); // Set Title to Bootstrap modal title
-    });
-
-    function pilihbarang(kodebrg) {
-        $.ajax({
-            url: "<?php echo site_url('C_pembelian/ajax_show') ?>/" + kodebrg,
-            type: "GET",
-            dataType: "JSON",
-            success: function(data) {
-                $('[name="kodebrg"]').val(data.kodebrg);
-                $('[name="barcode"]').val(data.barcode);
-                $('[name="namabrg"]').val(data.namabrg);
-                $('[name="hbeli"]').val(data.hpp);
-                $('[name="hjual"]').val(data.hjual1);
-                $('[name="sat"]').val(data.namasat);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error get data from ajax');
-            }
-        });
-    }
-
-    function pilihsup(kodesup) {
-        $.ajax({
-            url: "<?php echo site_url('C_pembelian/ajax_show_sup') ?>/" + kodesup,
-            type: "GET",
-            dataType: "JSON",
-            success: function(data) {
-                $('[name="kodesups"]').val(data.kodesup);
-                $('[name="namasuplier"]').val(data.namasup);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error get data from ajax');
-            }
-        });
-    }
-
-
 
     function cancel(id) {
         var data_id = id;
@@ -346,7 +279,6 @@
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,
-
             })
             .then((willDelete) => {
                 if (willDelete) {
@@ -376,6 +308,45 @@
                 // else {
                 //     swal("Your file is safe!");
                 // }
+            })
+    }
+
+    function recycle(id) {
+        var data_id = id;
+        var urls = '<?= site_url("C_pembelian/recycle/"); ?>';
+        swal({
+                title: "Are you sure?",
+                text: "Do you realy want to recycle this data?!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: 'POST',
+                        url: urls + data_id,
+                        dataType: "JSON",
+                        success: function(data) {
+                            if (data.is_error == true) {
+                                swal('Oopps', data.error_message, 'error');
+                            } else {
+                                swal({
+                                    title: "Info",
+                                    text: "Good luck Bro, recycle data berhasil .",
+                                    type: "success",
+                                    showConfirmButton: false,
+                                    timer: 1111
+                                });
+                            }
+                            table_pembelian.ajax.reload();
+                        },
+                        error: function(data) {
+                            swal("NOT Change!", "Something blew up.", "error");
+                        }
+                    });
+                }
             })
     }
 
@@ -415,10 +386,9 @@
                             swal("NOT Change!", "Something blew up.", "error");
                         }
                     });
+                } else {
+                    swal("Your file is safe!");
                 }
-                // else {
-                //     swal("Your file is safe!");
-                // }
             })
     }
 </script>

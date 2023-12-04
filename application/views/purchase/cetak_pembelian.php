@@ -9,9 +9,6 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-body col-12 text-center">
-                            <!-- <h3>KOPERASI INTI MAKMUR</h3>
-                            <h7>Jl. Akses Pabrik, Mangunreja, Kec. Puloampel, Kabupaten Serang, Banten 42455</h7>
-                            <br> -->
                             <center>
                                 <h2 style="margin-bottom: 0px;">INVOICE</h2>
                                 <h6 style="margin-top: 0px;" id="ID"></h6>
@@ -38,23 +35,22 @@
                                 </div>
                             </div>
                             <div id="divid">
-                                <hr>
-                                <h7></h7>
-                                <div class="table">
-                                    <input hidden name="idtemp1" id="idtemp1">
-                                    <div class="mb-12 row" hidden>
+                                <div class="mb-2 row">
+                                    <div class="table-responsive">
+                                        <input hidden name="idtemp1" id="idtemp1">
+                                        <table cellpadding=5 class="display" style="text-align: center;" id="datatable_print_pembelian">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 200px;">No</th>
+                                                    <th style="width: 250px;">Product Name</th>
+                                                    <th style="width: 200px;">QTY</th>
+                                                    <th style="width: 200px;">Unit</th>
+                                                    <th style="width: 200px;">Note</th>
+                                                </tr>
+                                            </thead>
+                                            <hr>
+                                        </table>
                                     </div>
-                                    <table class="table table-bordered" style="text-align: center;" id="datatable_print_pembelian">
-                                        <thead>
-                                            <tr>
-                                                <th style="width: 150px;">No </th>
-                                                <th style="width: 150px;">Product Name</th>
-                                                <th style="width: 150px;">QTY</th>
-                                                <th style="width: 150px;">Unit</th>
-                                                <th style="width: 150px;">Note</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -106,15 +102,6 @@
         docprint.document.write('</h5><center>');
         docprint.document.write(content_vlue);
         docprint.document.write('</center><hr><br>');
-        // docprint.document.write('<h4 style="margin-bottom: 0px; "> > Grand Total = Rp. ');
-        // docprint.document.write(gtotal);
-        // docprint.document.write('</h4>');
-        // docprint.document.write('<h4 style="margin-top: 0px;margin-bottom: 0px; "> > Discount &nbsp;&nbsp;&nbsp;&nbsp; = Rp. ');
-        // docprint.document.write(dis);
-        // docprint.document.write('</h4>');
-        // docprint.document.write('<h4 style="margin-top: 0px; "> > Tax &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= Rp. ');
-        // docprint.document.write(tax);
-        // docprint.document.write('</h4>');
         docprint.document.write('</body></html>');
         docprint.document.close();
         docprint.focus();
@@ -174,8 +161,6 @@
             "autoWidth": false,
             "overflow": false,
             "info": false,
-
-            "order": [], //Initial no order.
             "ajax": {
                 "url": "<?php echo site_url('C_pembelian/ajax_list_cetak') ?>",
                 "type": "POST",

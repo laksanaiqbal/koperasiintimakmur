@@ -24,7 +24,7 @@ class C_kelompokbarang extends CI_Controller
     public function index()
     {
         $data = array(
-            'title_form' => 'Report || Kelompok Barang',
+            'title_form' => '<i class="fa fa-arrow-circle-right"></i> Kelompok Barang',
             'url_back'   => site_url('C_kelompokbarang')
         );
         $this->load->view('template/header');

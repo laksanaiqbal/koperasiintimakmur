@@ -27,8 +27,7 @@ class M_pembelian extends CI_Model
         $this->db->from('dbeli a');
         $this->db->where("a.nobeli='0'");
         $this->db->join('barang b', 'a.kodebrg=b.kodebrg');
-        // $this->db->join('suplier c', 'a.id_sup=c.kodesup');
-        // $this->db->where('year(a.tanggal)', $years);
+
         $i = 0;
 
         foreach ($this->column_search as $item) // loop column 
@@ -215,6 +214,11 @@ class M_pembelian extends CI_Model
     public function update($where, $save_data)
     {
         $this->db->update($this->table, $save_data, $where);
+        return $this->db->affected_rows();
+    }
+    public function update_status($where, $save_status)
+    {
+        $this->db->update($this->table, $save_status, $where);
         return $this->db->affected_rows();
     }
     public function delete_by_id($id)

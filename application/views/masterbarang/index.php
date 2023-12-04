@@ -16,9 +16,9 @@
 <div class="row">
     <div class="card">
         <div class="card-body">
-            <form class="theme-form">
+            <!-- <form class="theme-form" id="formindex">
                 <div class="mb-3 row">
-                    <label class="col-sm-3 col-form-label" for="txt_nmkary">Item Name</label>
+                    <label class="col-sm-3 col-form-label" for="txt_nmkary">Product Name</label>
                     <div class="col-sm-9">
                         <?php
                         $this->db->select("kodebrg,namabrg");
@@ -45,7 +45,7 @@
                         </div>
                     </div>
                 </div>
-            </form>
+            </form> -->
             <div class="mb-3 row">
                 <div class="col-sm-5">
                     <button id="btn_input" class="btn btn-pill btn-outline-info btn-air-info" type="button" title="btn btn-pill btn-outline-info btn-air-info" data-bs-target="#staticBackdrop"><i class="fa fa-plus-square">
@@ -122,7 +122,7 @@
                 "type": "POST",
                 "data": function(data) {
                     $('#loader').hide();
-                    data.txt_nmkary = $('#txt_nmkary').select2().val();
+                    data.kodebrg = $('#txt_nmkary').select2().val();
                 }
             },
             //Set column definition initialisation properties.
@@ -189,12 +189,7 @@
     function scrollWin() {
         window.scrollBy(0, 500);
     };
-    $('#btn_input').click(function() { //button filter event click
-        $('#frmInput').modal('show'); // show bootstrap modal when complete loaded
-        $('.modal-title').text('  Tambah Barang'); // Set Title to Bootstrap modal title
-        $('[name="txt_input_level"]').val(null).trigger('change');
-        $('[name="txt_input_employee"]').val(null).trigger('change');
-    });
+
 
 
     function showgambar(kodebrg) {

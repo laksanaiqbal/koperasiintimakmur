@@ -33,6 +33,25 @@
     </div>
 </div>
 <script type="text/javascript">
+    $('#btn_sup').click(function() { //button filter event click
+        $('#showsup').modal('show'); // show bootstrap modal when complete loaded
+        $('.modal-title-sup').text('Choose Suplier'); // Set Title to Bootstrap modal title
+    });
+
+    function pilihsup(kodesup) {
+        $.ajax({
+            url: "<?php echo site_url('C_pembelian/ajax_show_sup') ?>/" + kodesup,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data) {
+                $('[name="kodesups"]').val(data.kodesup);
+                $('[name="namasuplier"]').val(data.namasup);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
+    }
     var table_sup;
     $(document).ready(function(e) {
         table_sup = $('#datatable_sup').DataTable({

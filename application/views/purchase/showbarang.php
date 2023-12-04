@@ -32,6 +32,31 @@
     </div>
 </div>
 <script type="text/javascript">
+    $('#inputFormBaru #btn_show').click(function() { //button filter event click
+        $('#showbarang').modal('show'); // show bootstrap modal when complete loaded
+    });
+    $('#inputFormBaru2 #btn_show').click(function() { //button filter event click
+        $('#showbarang').modal('show'); // show bootstrap modal when complete loaded
+    });
+
+    function pilihbarang(kodebrg) {
+        $.ajax({
+            url: "<?php echo site_url('C_pembelian/ajax_show') ?>/" + kodebrg,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data) {
+                $('[name="kodebrg"]').val(data.kodebrg);
+                $('[name="barcode"]').val(data.barcode);
+                $('[name="namabrg"]').val(data.namabrg);
+                $('[name="hbeli"]').val(data.hpp);
+                $('[name="hjual"]').val(data.hjual1);
+                $('[name="sat"]').val(data.namasat);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
+    }
     var table_show;
     $(document).ready(function(e) {
         table_show = $('#datatable_show').DataTable({

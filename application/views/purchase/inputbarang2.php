@@ -1,4 +1,4 @@
-<div class="modal fade bd-example-modal-lg" id="inputbarang" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade bd-example-modal-lg" id="inputbarang2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <div class="col-sm-12">
                     <div class="card-body">
-                        <form method="POST" id="inputFormBaru" class="theme-form" enctype="multipart/form-data">
+                        <form method="POST" id="inputFormBaru2" class="theme-form" enctype="multipart/form-data">
                             <div class="mb row" hidden>
                                 <div class="col-sm-9">
                                     <input class="form-control" id="nobeli" name="nobeli" type="number" placeholder="Type nobeli Here">
@@ -54,7 +54,7 @@
                             </div>
                             <div class="mb-2 row">
                                 <div class="col-md-12" style="text-align: center;">
-                                    <button style="width: 150px;" type="submit" id="btninputbarang" class="btn btn-pill btn-outline-primary-2x btn-air-primary">
+                                    <button style="width: 150px;" type="submit" id="btnSave" class="btn btn-pill btn-outline-primary-2x btn-air-primary">
                                         <i class="fa fa-send-o"> Post!</i>
                                     </button>
                                 </div>
@@ -67,18 +67,18 @@
     </div>
 </div>
 <script type="text/javascript">
-    $('#btninput').click(function() { //button filter event click
-        document.getElementById("inputFormBaru").reset();
-        var nobeli = parseInt($("#PO").val())
-        $("#nobeli").attr("value", nobeli)
-        $('#inputbarang').modal('show'); // show bootstrap modal when complete loaded
+    $('#btninput2').click(function() { //button filter event click
+        document.getElementById("inputFormBaru2").reset();
+        var nobeli = parseInt($("#idtemp2").val())
+        $("#inputbarang2 #nobeli").attr("value", nobeli)
+        $('#inputbarang2').modal('show'); // show bootstrap modal when complete loaded
         $('.modal-title-product').text('  Input Product'); // Set Title to Bootstrap modal title
     });
 
 
-    $('#inputFormBaru').submit(function(e) {
+    $('#inputFormBaru2').submit(function(e) {
         urls = "<?php echo site_url('C_pembelian/input_baru') ?>";
-        var data = new FormData($('#inputFormBaru')[0]);
+        var data = new FormData($('#inputFormBaru2')[0]);
         $.ajax({
             url: urls,
             type: 'POST',
@@ -107,15 +107,11 @@
                         type: "success"
                     });
                     table_pembelian.ajax.reload();
-                    table_baru.ajax.reload();
-                    $('#inputbarang').modal('hide');
-                    document.getElementById("inputFormBaru").reset();
-                    var print = document.getElementById("print");
-                    if (print.style.display === "none") {
-                        print.style.display = "block";
-                    } else {
-                        print.style.display = "block";
-                    }
+                    table_edit.ajax.reload();
+                    $('#inputbarang2').modal('hide');
+                    // $('#frmEditHeader').modal('hide');
+
+                    document.getElementById("inputFormBaru2").reset();
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {

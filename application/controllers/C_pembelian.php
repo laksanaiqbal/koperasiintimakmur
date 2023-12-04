@@ -30,7 +30,7 @@ class C_pembelian extends CI_Controller
     public function index()
     {
         $data = array(
-            'title_form' => 'Purchase List',
+            'title_form' => '<i class="fa fa-arrow-circle-right"></i> Purchase List',
             'url_back'   => site_url('C_pembelian')
         );
         $data['datasat'] = $this->M_satuan->getdata();
@@ -177,7 +177,7 @@ class C_pembelian extends CI_Controller
             $total = $qty * $hbeli;
             $nobeli = $this->input->post('nobeli');
             $microtime = substr((string)microtime(), 1, 8);
-            $date = trim($microtime, ".");
+            // $date = trim($microtime, ".");
             $save_data = array(
                 'kodebrg' => $post_data['kodebrg'],
                 'nobeli' => $post_data['nobeli'],
@@ -366,70 +366,9 @@ class C_pembelian extends CI_Controller
         $data = $this->M_suplier->get_by_id($kodesup);
         echo json_encode($data);
     }
-    // public function simpan_pembelian()
-    // {
-    //     $post_data  = $this->input->post();
-    //     $this->form_validation->set_rules('tanggal', 'Input tanggal', 'required');
-    //     $this->form_validation->set_rules('diskon', 'Input Diskon');
-    //     $this->form_validation->set_rules('total', 'Input total', 'required');
-    //     $this->form_validation->set_rules('metode', 'Input metode', 'required');
-    //     $this->form_validation->set_rules('bayar', 'Input Bayar', 'required');
-    //     $this->form_validation->set_rules('kembalian', 'Input kembalian');
-    //     $this->form_validation->set_rules('kodesup', 'Input Kodesup');
 
-    //     if ($this->form_validation->run() == false) {
-    //         $out['is_error']       = true;
-    //         $out['error_message']  = validation_errors();
-    //     } else {
-    //         $total = $this->input->post('total');
-    //         $bayar = $this->input->post('bayar');
-    //         $kembalian = $bayar - $total;
-    //         $microtime = substr((string)microtime(), 1, 8);
-    //         $date = trim($microtime, ".");
-    //         $save_data = array(
-    //             'tanggal' => $post_data['tanggal'],
-    //             // 'id_user' => $this->session->userdata('ID'),
-    //             'disc1' => $post_data['diskon'],
-    //             'tbrutto' => $post_data['total'],
-    //             'hutang' => $post_data['metode'],
-    //             'biaya' => $post_data['bayar'],
-    //             'potongan' => $kembalian,
-    //             'kodesup' => $post_data['kodesuplier'],
-    //             'idcabang' => $post_data['cabangs'],
-    //             'hutang' => $post_data['payments'],
-    //         );
-    //         $this->M_pembelian->save_pembelian($save_data);
-
-    //         $idbeli = "select max(nobeli) as nobeli from hbeli";
-    //         $id = implode($this->db->query($idbeli)->row_array());
-    //         $sql = "update dbeli set nobeli = '$id' where nobeli='0'";
-    //         $this->db->query($sql);
-
-    //         $idsup = "select max(kodesup) as kodesup from hbeli";
-    //         $ids = implode($this->db->query($idsup)->row_array());
-    //         $sqls = "update dbeli set kodesup = '$ids' where kodesup='0'";
-    //         $this->db->query($sqls);
-
-    //         $idcabang = "select max(idcabang) as idcabang from hbeli";
-    //         $idss = implode($this->db->query($idcabang)->row_array());
-    //         $sqlss = "update dbeli set idcabang = '$idss' where idcabang='0'";
-    //         $this->db->query($sqlss);
-    //         if ($this->db->trans_status() == FALSE) {
-    //             $this->db->trans_rollback();
-    //             $out['is_error']       = False;
-    //             $out['error_message']  = "database error";
-    //         } else {
-    //             $this->db->trans_commit();
-    //             $out['is_error']       = false;
-    //             $out['succes_message']  = "Good luck Bro, Input data berhasil";
-    //         }
-    //     }
-
-    //     echo json_encode($out);
-    // }
     public function delete_permanen($iddbeli)
     {
-
         $tbrutto = $this->db->query("SELECT a.tbrutto,b.brutto, a.nobeli, b.nobeli,b.iddbeli FROM inv.hbeli a JOIN inv.dbeli b ON a.nobeli=b.nobeli where b.iddbeli='" . $iddbeli . "'");
         foreach ($tbrutto->result() as $row) {
             $nobeli = $row->nobeli;
@@ -483,21 +422,18 @@ class C_pembelian extends CI_Controller
             $row[] = $listdata->namacabang;
             $row[] = $listdata->tanggal;
             $row[] = $listdata->namasup;
-            if ($listdata->hutang == 0) {
-                $row[] = '<span style="color:white" class="badge bg-warning">CASH</span>';
-            } elseif ($listdata->hutang == 1) {
-                $row[] = '<span style="color:white" class="badge bg-danger">HUTANG</span>';
-            }
             $row[] = 'Rp.' .  number_format($listdata->tbrutto, 0, '', '.');
             if ($listdata->post == 1) {
-                $row[] = '<span style="color:white" class="badge bg-danger">Canceled</span>';
+                $row[] = '<span style="color:white" class="badge bg-danger">Canceled</span><h5 style="text-align: center;"><a class="btn btn-pill btn-outline-success btn-air-success btn-xs" href="javascript:void(0)" title="Recovery Data" onclick="recycle(' . "'" . $listdata->nobeli . "'" . ')"><i class="fa fa-recycle"></i></a></h5>';
             } elseif ($listdata->post == 0) {
                 $row[] = '<a class="btn btn-pill btn-outline-primary btn-air-primary btn-xs" href="javascript:void(0)" data-bs-target="#staticBackdrop" title="Edit data" onclick="edit_data_pembelian(' . "'" . $listdata->nobeli . "'" . ')"><i class="fa fa-edit"></i> </a>
-                <a class="btn btn-pill btn-outline-danger btn-air-warning btn-xs" href="javascript:void(0)" title="cancel" onclick="cancel(' . "'" . $listdata->nobeli . "'" . ')"><i class="fa fa-xing"></i> </a>
+                <a class="btn btn-pill btn-outline-danger btn-air-warning btn-xs" href="javascript:void(0)" title="cancel" onclick="cancel(' . "'" . $listdata->nobeli . "'" . ')"><i class="fa fa-xing"></i> </a><p>
                 <a class="btn btn-pill btn-outline-warning btn-air-warning btn-xs" href="javascript:void(0)" data-bs-target="#staticBackdrop" title="Proses" onclick="proses(' . "'" . $listdata->nobeli . "'" . ')"><i class="fa fa-file-text-o"></i> </a>
                 <a class="btn btn-pill btn-outline-info btn-air-info btn-xs" href="javascript:void(0)"  title="print" onclick="print_pembelian(' . "'" . $listdata->nobeli . "'" . ')"><i class="fa fa-print"></i></a>';
             } elseif ($listdata->post == 2) {
                 $row[] = '<a class="btn btn-pill btn-outline-info btn-air-info btn-xs" href="javascript:void(0)" title="print" onclick="print_pembelian(' . "'" . $listdata->nobeli . "'" . ')"><i class="fa fa-print"></i></a>';
+            } elseif ($listdata->post == 3) {
+                $row[] = '<span style="color:white" class="badge bg-success">Finish</span>';
             }
             $data[] = $row;
         }
@@ -530,6 +466,67 @@ class C_pembelian extends CI_Controller
 
         echo json_encode($message);
     }
+    public function recycle($nobeli)
+    {
+        $message['is_error']       = true;
+        $message['succes_message']  = "";
+        if (!empty($nobeli)) {
+            $save_data = array(
+                'post' => '0',
+            );
+            $this->M_Dpembelian->update(array('nobeli' => $nobeli), $save_data);
+            $message['is_error']       = false;
+            $message['succes_message']  = "Change data success";
+        } else {
+            $message['is_error']       = true;
+            $message['error_message']  = "Errr!!!";
+        }
+
+        echo json_encode($message);
+    }
+
+    public function proses()
+    {
+        $post_data  = $this->input->post();
+        $this->form_validation->set_rules('idtemp4', 'Input nobeli', 'required');
+
+        if ($this->form_validation->run() == false) {
+            $out['is_error']       = true;
+            $out['error_message']  = validation_errors();
+        } else {
+            $nobeli = $this->input->post('idtemp4');
+            $save_data = array(
+                'post' => '3',
+            );
+            $this->M_Dpembelian->update(array('nobeli' => $nobeli), $save_data);
+
+            $save_status = array(
+                'status' => '1',
+            );
+            $this->M_pembelian->update_status(array('nobeli' => $nobeli), $save_status);
+
+            // $tbrutto = $this->db->query("SELECT b.status FROM inv.hbeli a JOIN inv.dbeli b ON a.nobeli=b.nobeli where b.nobeli='" . $nobeli . "'");
+            // foreach ($tbrutto->result() as $row) {
+            //     $nobelis = $row->nobeli;
+            //     $save_status = array(
+            //         'status' => '1',
+            //     );
+            //     $this->M_pembelian->update_status(array('nobeli' => $nobelis), $save_status);
+            // }
+
+            if ($this->db->trans_status() == FALSE) {
+                $this->db->trans_rollback();
+                $out['is_error']       = False;
+                $out['error_message']  = "database error";
+            } else {
+                $this->db->trans_commit();
+                $out['is_error']       = false;
+                $out['succes_message']  = "Good luck Bro, Input data berhasil";
+            }
+        }
+
+        echo json_encode($out);
+    }
     public function good($iddbeli)
     {
         $message['is_error']       = true;
@@ -560,7 +557,7 @@ class C_pembelian extends CI_Controller
         echo json_encode($message);
     }
 
-    public function ajax_list_detail()
+    public function ajax_list_edit()
     {
         $start  = $_REQUEST['start']; //tambahan limit
         $length = $_REQUEST['length'];
@@ -581,11 +578,85 @@ class C_pembelian extends CI_Controller
             $row[] = $no;
             if ($listdata->status == 0) {
                 $row[] = $listdata->namabrg . '<P><a class="btn btn-pill btn-outline-primary btn-air-primary btn-xs" href="javascript:void(0)" data-bs-target="#staticBackdrop" title="Edit data" onclick="edit_detail_beli(' . "'" . $listdata->iddbeli . "'" . ')"><i class="fa fa-edit"></i> </a>
-            <a class="btn btn-pill btn-outline-success btn-air-success btn-xs" href="javascript:void(0)" title="Good" onclick="good(' . "'" . $listdata->iddbeli . "'" . ')"><i class="fa fa-check-square-o"></i> </a>
             <a class="btn btn-pill btn-outline-danger btn-air-danger btn-xs" href="javascript:void(0)" title="Delete data" onclick="delete_data(' . "'" . $listdata->iddbeli . "'" . ')"><i class="fa fa-trash-o"></i> </a>';
             } elseif ($listdata->status == 1) {
                 $row[] = $listdata->namabrg . '<P><span style="color:white" class="badge bg-success">Received</span>';
             }
+            $row[] = $listdata->qtybeli;
+            $row[] = $listdata->namasat;
+            // $row[] = 'Rp.' .  number_format($listdata->brutto, 0, '', '.');
+            $row[] = $listdata->note;
+            $row[] = $listdata->brutto;
+            $data[] = $row;
+        }
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->M_detailpembelian->count_all(),
+            "recordsFiltered" => $this->M_detailpembelian->count_filtered($params),
+            "data" => $data,
+        );
+        echo json_encode($output);
+        // exit;
+    }
+    public function ajax_list_proses()
+    {
+        $start  = $_REQUEST['start']; //tambahan limit
+        $length = $_REQUEST['length'];
+        $params = array();
+        if ($this->input->post('dbeli')) {
+            $params['dbeli'] = $this->input->post('dbeli');
+        }
+        if ($length != -1) {
+            $params['limit'] = $length; //tambahan limit
+            $params['start'] = $start;
+        }
+        $list = $this->M_detailpembelian->get_datatables($params);
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($list as $listdata) {
+            $no++;
+            $row = array();
+            $row[] = $no;
+            if ($listdata->status == 0) {
+                $row[] = $listdata->namabrg;
+            } elseif ($listdata->status == 1) {
+                $row[] = $listdata->namabrg . '<P><span style="color:white" class="badge bg-success">Received</span>';
+            }
+            $row[] = $listdata->qtybeli;
+            $row[] = $listdata->namasat;
+            // $row[] = 'Rp.' .  number_format($listdata->brutto, 0, '', '.');
+            $row[] = $listdata->note;
+            $data[] = $row;
+        }
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->M_detailpembelian->count_all(),
+            "recordsFiltered" => $this->M_detailpembelian->count_filtered($params),
+            "data" => $data,
+        );
+        echo json_encode($output);
+        // exit;
+    }
+    public function ajax_list_input()
+    {
+        $start  = $_REQUEST['start']; //tambahan limit
+        $length = $_REQUEST['length'];
+        $params = array();
+        if ($this->input->post('dbeli')) {
+            $params['dbeli'] = $this->input->post('dbeli');
+        }
+        if ($length != -1) {
+            $params['limit'] = $length; //tambahan limit
+            $params['start'] = $start;
+        }
+        $list = $this->M_detailpembelian->get_datatables($params);
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($list as $listdata) {
+            $no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = $listdata->namabrg;
             $row[] = $listdata->qtybeli;
             $row[] = $listdata->namasat;
             $row[] = 'Rp.' .  number_format($listdata->brutto, 0, '', '.');
@@ -641,7 +712,6 @@ class C_pembelian extends CI_Controller
         echo json_encode($data);
     }
 
-    //alur baru
     public function save_header()
     {
         $post_data  = $this->input->post();
@@ -669,7 +739,7 @@ class C_pembelian extends CI_Controller
                 'kodesup' => $post_data['kodesups'],
                 'tanggalreq' => $post_data['tanggalreq'],
                 'tanggaldel' => $post_data['tanggaldel'],
-                'tanggal' => date('Y-m-d'),
+                'tanggal' => date('d-m-Y'),
                 'ppn' => $post_data['ppn'],
                 'faktur' => $post_data['faktur'],
                 'disc1' => $post_data['diskon'],
@@ -709,7 +779,7 @@ class C_pembelian extends CI_Controller
         $post_data  = $this->input->post();
         $this->form_validation->set_rules('cabangs', 'Input cabang', 'required');
         $this->form_validation->set_rules('payments', 'Input metode', 'required');
-        $this->form_validation->set_rules('kodesups', 'Input Kodesup');
+        $this->form_validation->set_rules('kodesupss', 'Input Kodesup', 'required');
         $this->form_validation->set_rules('tanggalreqs', 'Input tanggalreq');
         $this->form_validation->set_rules('tanggaldels', 'Input tanggaldel');
         $this->form_validation->set_rules('ppns', 'Input ppn');
@@ -730,6 +800,7 @@ class C_pembelian extends CI_Controller
                 'faktur' => $post_data['fakturss'],
                 'disc1' => $post_data['diskons'],
                 'nobeli' => $post_data['id_pembelian'],
+                'kodesup' => $post_data['kodesupss'],
             );
             $this->M_Dpembelian->update(array('nobeli' => $this->input->post('id_pembelian')), $save_data);
 

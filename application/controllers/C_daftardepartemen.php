@@ -24,7 +24,7 @@ class C_daftardepartemen extends CI_Controller
     public function index()
     {
         $data = array(
-            'title_form' => 'Report || Daftar Departemen',
+            'title_form' => '<i class="fa fa-arrow-circle-right"></i> Daftar Departemen',
             'url_back'   => site_url('C_daftardepartemen')
         );
         $this->load->view('template/header');
